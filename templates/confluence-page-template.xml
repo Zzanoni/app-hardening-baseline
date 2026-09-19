@@ -1,0 +1,194 @@
+<ac:structured-macro ac:name="details" ac:schema-version="1" ac:local-id="pp-001">
+  <ac:parameter ac:name="id">app-hardening-properties</ac:parameter>
+  <ac:rich-text-body>
+    <table>
+      <tbody>
+        <tr>
+          <th>Application Name</th>
+          <td>{{Application Name}}</td>
+        </tr>
+        <tr>
+          <th>Target ASVS Level</th>
+          <td>{{L1 / L2 / L3}}</td>
+        </tr>
+        <tr>
+          <th>Owner / Team</th>
+          <td>{{Owner or team name}}</td>
+        </tr>
+        <tr>
+          <th>Last Reviewed</th>
+          <td>{{YYYY-MM-DD}}</td>
+        </tr>
+        <tr>
+          <th>Overall Status</th>
+          <td>
+            <ac:structured-macro ac:name="status" ac:schema-version="1" ac:local-id="pp-status">
+              <ac:parameter ac:name="colour">Grey</ac:parameter>
+              <ac:parameter ac:name="title">Not started</ac:parameter>
+            </ac:structured-macro>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ac:rich-text-body>
+</ac:structured-macro>
+
+<p />
+
+<ac:structured-macro ac:name="toc" ac:schema-version="1" ac:local-id="toc-001" />
+
+<h2>1. Application Characterization</h2>
+<p>Copied from the <em>Characterization Form</em> sheet of the master hardening template.</p>
+<table>
+  <tbody>
+    <tr>
+      <th>Question</th>
+      <th>Answer</th>
+    </tr>
+    <tr>
+      <td>Target ASVS verification level</td>
+      <td>{{L1 / L2 / L3}}</td>
+    </tr>
+    <tr>
+      <td>Exposes an API (REST/GraphQL/WebSocket/RPC)?</td>
+      <td>{{Yes / No}}</td>
+    </tr>
+    <tr>
+      <td>Has a client-side front end (SPA)?</td>
+      <td>{{Yes / No}}</td>
+    </tr>
+    <tr>
+      <td>Maintains server-side stateful sessions?</td>
+      <td>{{Yes / No}}</td>
+    </tr>
+    <tr>
+      <td>Handles file upload, storage, or download?</td>
+      <td>{{Yes / No}}</td>
+    </tr>
+    <tr>
+      <td>Uses OAuth 2.0 or OpenID Connect?</td>
+      <td>{{Yes / No}}</td>
+    </tr>
+    <tr>
+      <td>Stores or processes sensitive data?</td>
+      <td>{{Yes / No}}</td>
+    </tr>
+    <tr>
+      <td>Uses WebRTC?</td>
+      <td>{{Yes / No}}</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>2. Coverage Summary</h2>
+<table>
+  <tbody>
+    <tr>
+      <th>Metric</th>
+      <th>Value</th>
+    </tr>
+    <tr>
+      <td>Total applicable requirements</td>
+      <td>{{count}}</td>
+    </tr>
+    <tr>
+      <td>
+        <ac:structured-macro ac:name="status" ac:schema-version="1" ac:local-id="sum-full">
+          <ac:parameter ac:name="colour">Green</ac:parameter>
+          <ac:parameter ac:name="title">Full coverage</ac:parameter>
+        </ac:structured-macro>
+      </td>
+      <td>{{count}}</td>
+    </tr>
+    <tr>
+      <td>
+        <ac:structured-macro ac:name="status" ac:schema-version="1" ac:local-id="sum-partial">
+          <ac:parameter ac:name="colour">Yellow</ac:parameter>
+          <ac:parameter ac:name="title">Partial coverage</ac:parameter>
+        </ac:structured-macro>
+      </td>
+      <td>{{count}}</td>
+    </tr>
+    <tr>
+      <td>
+        <ac:structured-macro ac:name="status" ac:schema-version="1" ac:local-id="sum-gap">
+          <ac:parameter ac:name="colour">Red</ac:parameter>
+          <ac:parameter ac:name="title">Gap</ac:parameter>
+        </ac:structured-macro>
+      </td>
+      <td>{{count}}</td>
+    </tr>
+    <tr>
+      <td>
+        <ac:structured-macro ac:name="status" ac:schema-version="1" ac:local-id="sum-na">
+          <ac:parameter ac:name="colour">Grey</ac:parameter>
+          <ac:parameter ac:name="title">Not assessed</ac:parameter>
+        </ac:structured-macro>
+      </td>
+      <td>{{count}}</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>3. Hardening Checklist</h2>
+<p>One Expand block per ASVS chapter with at least one applicable requirement. Delete unused chapter
+blocks; duplicate this block for each chapter that has applicable rows.</p>
+
+<ac:structured-macro ac:name="expand" ac:schema-version="1" ac:local-id="chapter-block-example">
+  <ac:parameter ac:name="title">{{V# - Chapter Name}} — {{n}} applicable requirements</ac:parameter>
+  <ac:rich-text-body>
+    <table>
+      <tbody>
+        <tr>
+          <th>ASVS ID</th>
+          <th>Requirement</th>
+          <th>Level</th>
+          <th>Control Type</th>
+          <th>Coverage Status</th>
+          <th>Tool / Evidence</th>
+          <th>Notes</th>
+        </tr>
+        <tr>
+          <td>{{e.g. V6.2.1}}</td>
+          <td>{{requirement text, copied verbatim from the spreadsheet}}</td>
+          <td>{{1 / 2 / 3}}</td>
+          <td>{{e.g. SAST + integration testing}}</td>
+          <td>
+            <ac:structured-macro ac:name="status" ac:schema-version="1" ac:local-id="row-status-example">
+              <ac:parameter ac:name="colour">Grey</ac:parameter>
+              <ac:parameter ac:name="title">Not assessed</ac:parameter>
+            </ac:structured-macro>
+          </td>
+          <td>{{tool name}}</td>
+          <td>{{notes}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </ac:rich-text-body>
+</ac:structured-macro>
+
+<h2>4. Gaps and Action Items</h2>
+<p>Every row marked Gap in section 3, tracked as an assignable task.</p>
+<ac:task-list>
+  <ac:task>
+    <ac:task-id>1</ac:task-id>
+    <ac:task-status>incomplete</ac:task-status>
+    <ac:task-body>{{ASVS ID}} — {{short description of the gap}} — owner: {{name}} — due: {{date}}</ac:task-body>
+  </ac:task>
+</ac:task-list>
+
+<h2>5. Review History</h2>
+<table>
+  <tbody>
+    <tr>
+      <th>Date</th>
+      <th>Reviewer</th>
+      <th>Changes</th>
+    </tr>
+    <tr>
+      <td>{{YYYY-MM-DD}}</td>
+      <td>{{name}}</td>
+      <td>Initial hardening record created from the master template.</td>
+    </tr>
+  </tbody>
+</table>

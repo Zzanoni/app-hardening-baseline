@@ -25,9 +25,11 @@ a document from scratch.
 app-hardening-baseline/
 ├── README.md
 ├── docs/
-│   └── hardening-baseline-governance.md   # Why ASVS, baseline categories, coverage matrix, governance model
+│   ├── hardening-baseline-governance.md   # Why ASVS, baseline categories, coverage matrix, governance model
+│   └── confluence-page-template.md        # Spec for the per-application Confluence page
 └── templates/
-    └── ASVS_Master_Hardening_Template.xlsx  # The 345-requirement master checklist with applicability formulas
+    ├── ASVS_Master_Hardening_Template.xlsx  # The 345-requirement master checklist with applicability formulas
+    └── confluence-page-template.xml         # Ready-to-import Confluence storage-format page template
 ```
 
 ## How the master template works
@@ -72,8 +74,10 @@ or high-impact irreversible actions → L3.
 3. Filter the **Master Template** sheet's `Applicable?` column to `Applicable`.
 4. For each applicable requirement, record the real coverage status, the tool/evidence used, and any
    notes.
-5. Publish the filtered result as the application's formal hardening record (target format: a Confluence
-   page per application — see Roadmap below).
+5. Publish the filtered result as the application's formal hardening record: a Confluence page per
+   application, built from [`docs/confluence-page-template.md`](docs/confluence-page-template.md) (spec)
+   and [`templates/confluence-page-template.xml`](templates/confluence-page-template.xml) (ready-to-import
+   Confluence storage format).
 
 ## Source
 
@@ -84,11 +88,11 @@ underlying ASVS requirement text.
 
 ## Roadmap
 
-- [ ] Per-application formalization format (Confluence page template, generated from the filtered
-      spreadsheet).
 - [ ] Auto-suggested target ASVS level (currently a documented manual decision, based on the
       characterization answers).
 - [ ] Section-level applicability refinement for chapters where a whole-chapter condition is too coarse.
+- [ ] Optional: automate Confluence page creation/update from the filtered spreadsheet via the Confluence
+      REST API (the current workflow is a one-time template setup, then manual per-application copy).
 
 ## Status
 
