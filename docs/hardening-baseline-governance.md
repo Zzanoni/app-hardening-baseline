@@ -79,6 +79,46 @@ their role is to validate what automation cannot reach (business logic, chained 
 only considered "hardened" once every row has a mapped, running control — a row with no corresponding control is
 a **coverage gap**, not an item resolved by documentation alone.
 
+## Risk tiering / Criticality
+
+Coverage status alone ("Full / Partial / Gap") does not tell a team which gaps to fix first. The
+governance team defining the formal rules for this process requested that every applicable hardening
+item also carry a **criticality classification** (Low / Medium / High / Critical), because Critical
+and High items need to follow stricter governance rules (remediation SLA, escalation, exception
+approval — see "Governance rules by criticality" below).
+
+Criticality is **not fixed per ASVS requirement** — the same requirement carries different real-world
+risk depending on the application it applies to (a broken-access-control gap is worse on a public,
+regulated-data application than on an internal tool). It is computed per application, per applicable
+item, from two independent factors:
+
+1. **Requirement Impact** — fixed per ASVS chapter, reflecting how severe it is when that *type* of
+   control fails (e.g., Authentication, Authorization, Cryptography, Session Management = High;
+   Configuration = Low). Implemented in the Master Template sheet as column **O**.
+2. **Application Risk Tier** — derived per application from three Characterization Form answers: Data
+   Sensitivity, network Exposure, and Business Impact. The application's tier is the *worst* of the
+   three (the single highest-risk factor drives the tier, rather than being diluted by an average).
+   Implemented as the computed `APP_RISK_TIER` field on the Characterization Form sheet.
+
+The two factors cross in a risk matrix (also on the Characterization Form sheet, named range
+`CRIT_MATRIX`) to produce the final Criticality value, in Master Template column **P**:
+
+| Requirement Impact \ App Risk Tier | Low | Medium | High | Critical |
+| --- | --- | --- | --- | --- |
+| High | Medium | High | High | Critical |
+| Medium | Low | Medium | Medium | High |
+| Low | Low | Low | Low | Medium |
+
+Only requirements already marked `Applicable` receive a Criticality value; `N/A` rows are unaffected.
+
+### Governance rules by criticality
+
+*(TBD — to be defined by the governance team.)* This subsection should document, per criticality
+level, what changes in how a Gap is handled: e.g., remediation SLA, who must be notified, what level
+of sign-off is required to formally accept the risk instead of fixing it, and whether Critical/High
+gaps block a release. Until this is filled in, the Criticality column is informational — it identifies
+which gaps should be prioritized, without yet gating any process.
+
 ## Gaps and the governance role of this document
 
 The baseline document (the company's "reduced ASVS") is not the verification mechanism itself — it is the

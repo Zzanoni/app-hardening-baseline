@@ -70,12 +70,24 @@
       <td>{{Yes / No}}</td>
     </tr>
     <tr>
-      <td>Stores or processes sensitive data?</td>
-      <td>{{Yes / No}}</td>
+      <td>Data classification stored or processed</td>
+      <td>{{None / Internal / Confidential / Regulated}}</td>
     </tr>
     <tr>
       <td>Uses WebRTC?</td>
       <td>{{Yes / No}}</td>
+    </tr>
+    <tr>
+      <td>Network exposure</td>
+      <td>{{Internal only / Partner-B2B network / Public internet}}</td>
+    </tr>
+    <tr>
+      <td>Business impact if breached or unavailable</td>
+      <td>{{Low / Medium / High / Critical}}</td>
+    </tr>
+    <tr>
+      <td>Application Risk Tier <em>(computed)</em></td>
+      <td>{{Low / Medium / High / Critical}}</td>
     </tr>
   </tbody>
 </table>
@@ -127,6 +139,24 @@
       </td>
       <td>{{count}}</td>
     </tr>
+    <tr>
+      <td>
+        <ac:structured-macro ac:name="status" ac:schema-version="1" ac:local-id="sum-crit">
+          <ac:parameter ac:name="colour">Red</ac:parameter>
+          <ac:parameter ac:name="title">Critical items</ac:parameter>
+        </ac:structured-macro>
+      </td>
+      <td>{{count}}</td>
+    </tr>
+    <tr>
+      <td>
+        <ac:structured-macro ac:name="status" ac:schema-version="1" ac:local-id="sum-high">
+          <ac:parameter ac:name="colour">Purple</ac:parameter>
+          <ac:parameter ac:name="title">High items</ac:parameter>
+        </ac:structured-macro>
+      </td>
+      <td>{{count}}</td>
+    </tr>
   </tbody>
 </table>
 
@@ -143,6 +173,7 @@ blocks; duplicate this block for each chapter that has applicable rows.</p>
           <th>ASVS ID</th>
           <th>Requirement</th>
           <th>Level</th>
+          <th>Criticality</th>
           <th>Control Type</th>
           <th>Coverage Status</th>
           <th>Tool / Evidence</th>
@@ -152,6 +183,12 @@ blocks; duplicate this block for each chapter that has applicable rows.</p>
           <td>{{e.g. V6.2.1}}</td>
           <td>{{requirement text, copied verbatim from the spreadsheet}}</td>
           <td>{{1 / 2 / 3}}</td>
+          <td>
+            <ac:structured-macro ac:name="status" ac:schema-version="1" ac:local-id="row-crit-example">
+              <ac:parameter ac:name="colour">Grey</ac:parameter>
+              <ac:parameter ac:name="title">Low</ac:parameter>
+            </ac:structured-macro>
+          </td>
           <td>{{e.g. SAST + integration testing}}</td>
           <td>
             <ac:structured-macro ac:name="status" ac:schema-version="1" ac:local-id="row-status-example">

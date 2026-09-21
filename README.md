@@ -19,7 +19,7 @@ generic they never get enforced. This repo separates the two things that actuall
   down to what's actually applicable to a given application, based on a short characterization form —
   see [`templates/ASVS_Master_Hardening_Template.xlsx`](templates/ASVS_Master_Hardening_Template.xlsx).
 
-The result: onboarding a new application's hardening record is answering ~9 closed questions, not writing
+The result: onboarding a new application's hardening record is answering ~11 closed questions, not writing
 a document from scratch.
 
 ## Repository structure
@@ -42,8 +42,8 @@ The workbook has three sheets:
 | Sheet | Purpose |
 | --- | --- |
 | **Instructions** | Step-by-step usage guide and scope notes |
-| **Characterization Form** | ~9 closed-vocabulary questions about the application (target ASVS level, exposes an API, uses OAuth/OIDC, session model, etc.) |
-| **Master Template** | All 345 ASVS 5.0.0 requirements, each tagged with chapter, section, level, control type, and a live `Applicable?` formula |
+| **Characterization Form** | ~11 closed-vocabulary questions about the application (target ASVS level, exposes an API, uses OAuth/OIDC, session model, data sensitivity, network exposure, business impact, etc.) |
+| **Master Template** | All 345 ASVS 5.0.0 requirements, each tagged with chapter, section, level, control type, and live `Applicable?` and `Criticality` formulas |
 
 Applicability is computed on **two axes at once**:
 
@@ -55,6 +55,13 @@ Applicability is computed on **two axes at once**:
 
 Both conditions are plain Excel formulas over named ranges, so changing an answer in the Characterization
 Form re-filters the entire 345-row template instantly — no macros, no external tooling required to use it.
+
+Every applicable requirement also gets a **Criticality** (Low/Medium/High/Critical), computed the same
+way — as a fixed per-chapter Requirement Impact crossed against this application's Risk Tier (derived
+from the Data Sensitivity, Exposure, and Business Impact answers). The same ASVS requirement can land at
+a different Criticality on different applications. See
+[`docs/hardening-baseline-governance.md`](docs/hardening-baseline-governance.md#risk-tiering--criticality)
+for the full model.
 
 ## Choosing the target ASVS level
 
@@ -92,8 +99,12 @@ underlying ASVS requirement text.
 ## Roadmap
 
 - [ ] Auto-suggested target ASVS level (currently a documented manual decision, based on the
-      characterization answers).
+      characterization answers) — the new `APP_RISK_TIER` computed field is a candidate input, but is
+      not wired to `TARGET_LEVEL` yet.
 - [ ] Section-level applicability refinement for chapters where a whole-chapter condition is too coarse.
+- [ ] Governance rules by criticality (SLA, escalation, exception approval for Critical/High items) —
+      the `Criticality` field exists and is computed; the process rules that act on it are still TBD,
+      see [`docs/hardening-baseline-governance.md`](docs/hardening-baseline-governance.md#risk-tiering--criticality).
 - [ ] Optional: automate Confluence page creation/update from the filtered spreadsheet via the Confluence
       REST API (the current workflow is a one-time template setup, then manual per-application copy).
 

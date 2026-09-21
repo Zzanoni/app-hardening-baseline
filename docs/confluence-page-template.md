@@ -54,6 +54,13 @@ into the full checklist:
 | 🟡 Partial coverage | *(count)* |
 | 🔴 Gap | *(count)* |
 | ⚪ Not assessed | *(count)* |
+| 🔴 Critical items | *(count of applicable rows with Criticality = Critical)* |
+| 🟠 High items | *(count of applicable rows with Criticality = High)* |
+
+The Critical/High counts are a read of the `Criticality` column (Master Template column P), not of
+Coverage Status — a Critical item can still be Full coverage; this row exists so a reviewer can see at
+a glance how many high-priority items this application carries, independent of how well they're
+currently covered.
 
 ### 5. Hardening Checklist, grouped by ASVS chapter
 
@@ -61,7 +68,14 @@ One **Expand** macro per ASVS chapter that has at least one applicable requireme
 default, to keep the page navigable — an application in scope for most chapters can easily have 150–250
 rows). Inside each Expand, a table with columns:
 
-`ASVS ID | Requirement | Level | Control Type | Coverage Status | Tool / Evidence | Notes`
+`ASVS ID | Requirement | Level | Criticality | Control Type | Coverage Status | Tool / Evidence | Notes`
+
+`Criticality` uses the Status macro (Red = Critical, Purple = High, Yellow = Medium, Grey = Low) — the
+closest mapping onto Confluence's fixed status-macro palette (Grey/Red/Yellow/Green/Blue/Purple, which
+has no orange) to the spreadsheet's own conditional formatting on column P (which does use an orange
+fill for High, being unconstrained by Confluence's palette). See
+[`hardening-baseline-governance.md`](hardening-baseline-governance.md#risk-tiering--criticality) for
+how Criticality is computed.
 
 `Coverage Status` uses the Status macro (Green = Full coverage, Yellow = Partial coverage, Red = Gap,
 Grey = Not assessed), matching the spreadsheet's conditional formatting colors.
@@ -73,8 +87,8 @@ answers).
 ### 6. Gaps and Action Items
 
 A **Task List** macro listing every row with Coverage Status = Gap, each as an assignable, due-dated
-task. This is the section a team lead actually works from day to day — the full checklist above is the
-audit record, this section is the backlog.
+task, ordered with Critical and High criticality items first. This is the section a team lead actually
+works from day to day — the full checklist above is the audit record, this section is the backlog.
 
 ### 7. Review History
 
