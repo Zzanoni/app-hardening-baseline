@@ -84,13 +84,22 @@ Only chapters and rows marked `Applicable` in the filtered spreadsheet are copie
 left out of the page entirely (that exclusion is itself recorded in section 3, via the characterization
 answers).
 
-### 6. Gaps and Action Items
+### 6. Company-Specific Controls
 
-A **Task List** macro listing every row with Coverage Status = Gap, each as an assignable, due-dated
-task, ordered with Critical and High criticality items first. This is the section a team lead actually
-works from day to day — the full checklist above is the audit record, this section is the backlog.
+One additional **Expand** macro, kept separate from the ASVS-chapter Expand blocks in section 5, for
+rows copied from the spreadsheet's `Custom Controls` sheet (organization-specific requirements that
+aren't part of ASVS — see [`hardening-baseline-governance.md`](hardening-baseline-governance.md#extending-the-baseline-beyond-asvs)).
+Same table columns as section 5, with `Control ID` in place of `ASVS ID`. Omit this block entirely if
+the application's `Custom Controls` sheet has no applicable rows.
 
-### 7. Review History
+### 7. Gaps and Action Items
+
+A **Task List** macro listing every row with Coverage Status = Gap, from both section 5 and section 6,
+each as an assignable, due-dated task, ordered with Critical and High criticality items first. This is
+the section a team lead actually works from day to day — the full checklist above is the audit record,
+this section is the backlog.
+
+### 8. Review History
 
 A simple table logging each review pass: `Date | Reviewer | Changes`. Append a row every time the page
 is revisited, rather than editing history away.
@@ -103,6 +112,8 @@ is revisited, rather than editing history away.
 3. Filter the spreadsheet's `Master Template` sheet to `Applicable`, and for each ASVS chapter present,
    copy its rows into the matching Expand block in section 5 (create one Expand block per chapter that
    has applicable rows; delete unused chapter blocks from the template).
-4. Fill in section 4 (Coverage Summary) counts once section 5 is complete.
-5. Copy every Gap row into section 6 as a task, with an owner and due date.
-6. Log the pass in section 7.
+4. If the `Custom Controls` sheet has any applicable rows, copy them into section 6; otherwise delete
+   that block.
+5. Fill in section 4 (Coverage Summary) counts once sections 5 and 6 are complete.
+6. Copy every Gap row into section 7 as a task, with an owner and due date.
+7. Log the pass in section 8.

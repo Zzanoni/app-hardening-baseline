@@ -88,6 +88,17 @@ The 345 requirements, their chapters, and their levels are copied word-for-word 
 been changed. What this repository adds on top is: the automatic filtering, the criticality scoring, and
 the company's own rulebook explaining how each requirement should be checked in practice.
 
+## Adding your own controls, beyond ASVS
+
+Sometimes a requirement matters to your organization but isn't part of ASVS — an internal policy, a
+contractual obligation, or a control for something ASVS doesn't cover. The spreadsheet has a separate
+tab for exactly that: **Custom Controls**. It works the same way as the main checklist (same columns,
+same automatic Applicable/Criticality behavior), but starts empty so you add only what you need.
+
+Custom controls always go on that tab, never mixed into the "Master Template" tab. That tab is kept as
+an exact copy of ASVS on purpose, so it can be safely refreshed whenever a new ASVS version comes out
+without losing anything or double-checking for conflicts.
+
 ## Keeping it up to date
 
 This is one shared, living baseline — not a one-time document. If something about the checklist needs to

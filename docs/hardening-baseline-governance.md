@@ -118,6 +118,34 @@ of sign-off is required to formally accept the risk instead of fixing it, and wh
 gaps block a release. Until this is filled in, the Criticality column is informational — it identifies
 which gaps should be prioritized, without yet gating any process.
 
+## Extending the baseline beyond ASVS
+
+ASVS is comprehensive for generic application security, but it is not the full universe of requirements
+an organization may need to track — an internal policy, a contractual or regulatory obligation specific
+to the organization, or a control for a technology ASVS doesn't address (e.g., a specific internal
+platform) may all need to be part of the same hardening record.
+
+These go on the **`Custom Controls`** sheet of the master workbook, never appended to `Master Template`.
+The separation is deliberate:
+
+- `Master Template` must stay a byte-for-byte match of the upstream ASVS content, so a future ASVS
+  release can always be diffed and merged in cleanly, and the "we don't modify the underlying ASVS
+  requirement text" claim in this repo stays true without caveats.
+- Custom control IDs (e.g., `CUSTOM-01`) are then guaranteed never to collide with a real or future ASVS
+  ID, even across ASVS version upgrades.
+
+`Custom Controls` mirrors `Master Template`'s columns and reuses the same underlying mechanics
+(`TARGET_LEVEL_NUM` for level gating, `CRIT_MATRIX`/`APP_RISK_TIER` for Criticality) — a custom control
+gets filtered and prioritized exactly like an ASVS one. The one deliberate difference: its Applicability
+Formula column is a live, directly-editable formula (default `=TRUE()`, i.e. always applicable) rather
+than `Master Template`'s hidden helper column, since a custom control's applicability condition is
+organization-defined and can't be pre-written into the template the way ASVS chapter gating can.
+
+When publishing to Confluence (see [`confluence-page-template.md`](confluence-page-template.md)), custom
+controls get their own Expand block ("Company-Specific Controls"), kept visually separate from the
+ASVS-chapter blocks so a reader can tell at a glance which requirements are the industry standard and
+which are this organization's own addition.
+
 ## Gaps and the governance role of this document
 
 The baseline document (the company's "reduced ASVS") is not the verification mechanism itself — it is the

@@ -204,8 +204,54 @@ blocks; duplicate this block for each chapter that has applicable rows.</p>
   </ac:rich-text-body>
 </ac:structured-macro>
 
-<h2>4. Gaps and Action Items</h2>
-<p>Every row marked Gap in section 3, tracked as an assignable task.</p>
+<h2>4. Company-Specific Controls</h2>
+<p>Rows copied from the spreadsheet's <em>Custom Controls</em> sheet — requirements this organization
+tracks beyond OWASP ASVS. Kept in its own block, separate from the ASVS chapter blocks above, so a
+reader can tell which requirements are the industry standard and which are this organization's own
+addition. Delete this whole block if the application's Custom Controls sheet has no applicable rows.</p>
+
+<ac:structured-macro ac:name="expand" ac:schema-version="1" ac:local-id="custom-controls-block">
+  <ac:parameter ac:name="title">Company-Specific Controls — {{n}} applicable requirements</ac:parameter>
+  <ac:rich-text-body>
+    <table>
+      <tbody>
+        <tr>
+          <th>Control ID</th>
+          <th>Requirement</th>
+          <th>Level</th>
+          <th>Criticality</th>
+          <th>Control Type</th>
+          <th>Coverage Status</th>
+          <th>Tool / Evidence</th>
+          <th>Notes</th>
+        </tr>
+        <tr>
+          <td>{{e.g. CUSTOM-01}}</td>
+          <td>{{requirement text, copied verbatim from the Custom Controls sheet}}</td>
+          <td>{{1 / 2 / 3}}</td>
+          <td>
+            <ac:structured-macro ac:name="status" ac:schema-version="1" ac:local-id="custom-row-crit-example">
+              <ac:parameter ac:name="colour">Grey</ac:parameter>
+              <ac:parameter ac:name="title">Low</ac:parameter>
+            </ac:structured-macro>
+          </td>
+          <td>{{e.g. SAST + manual review}}</td>
+          <td>
+            <ac:structured-macro ac:name="status" ac:schema-version="1" ac:local-id="custom-row-status-example">
+              <ac:parameter ac:name="colour">Grey</ac:parameter>
+              <ac:parameter ac:name="title">Not assessed</ac:parameter>
+            </ac:structured-macro>
+          </td>
+          <td>{{tool name}}</td>
+          <td>{{notes}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </ac:rich-text-body>
+</ac:structured-macro>
+
+<h2>5. Gaps and Action Items</h2>
+<p>Every row marked Gap in sections 3 or 4, tracked as an assignable task.</p>
 <ac:task-list>
   <ac:task>
     <ac:task-id>1</ac:task-id>
@@ -214,7 +260,7 @@ blocks; duplicate this block for each chapter that has applicable rows.</p>
   </ac:task>
 </ac:task-list>
 
-<h2>5. Review History</h2>
+<h2>6. Review History</h2>
 <table>
   <tbody>
     <tr>
