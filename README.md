@@ -3,113 +3,101 @@
 [![License: CC BY-SA 4.0](https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg)](LICENSE)
 [![OWASP ASVS 5.0.0](https://img.shields.io/badge/OWASP%20ASVS-5.0.0-blue.svg)](https://github.com/OWASP/ASVS)
 
-A stack-agnostic application-hardening baseline, built on the full **OWASP ASVS 5.0.0** requirement
-set (345 requirements, 17 chapters), designed to scale across 100+ applications without rewriting a
-document for each one.
+## What this is, in plain terms
 
-## Why this exists
+Every application (a website, a mobile app, an internal system) needs to be checked against a list of
+security best practices — things like "passwords must be strong," "user sessions must expire," "sensitive
+data must be protected." Doing this checklist from scratch for every application, in a Word document, is
+slow and inconsistent: every app ends up with a different checklist, some things get forgotten, and nobody
+can easily compare one application's security posture to another's.
 
-Most "application hardening" checklists either duplicate what SAST/DAST/SCA already catch, or stay so
-generic they never get enforced. This repo separates the two things that actually matter:
+This repository solves that with **one shared checklist**, built once and reused for every application in
+the company. Instead of writing a new document each time, you answer about 11 simple yes/no or
+multiple-choice questions about the application, and the checklist automatically narrows itself down to
+only the items that actually apply to that application.
 
-- **A governance baseline** — what "hardened" means at this company, and how each requirement maps to a
-  real technical control (pipeline gate, scheduled scan, or periodic pentest) — see
-  [`docs/hardening-baseline-governance.md`](docs/hardening-baseline-governance.md).
-- **A master template** — the full ASVS 5.0.0 requirement set, pre-wired with formulas that filter it
-  down to what's actually applicable to a given application, based on a short characterization form —
-  see [`templates/ASVS_Master_Hardening_Template.xlsx`](templates/ASVS_Master_Hardening_Template.xlsx).
+The checklist itself is not invented here — it is the **OWASP ASVS**, an internationally recognized,
+independently maintained list of application-security requirements (345 items in total). This repository
+just organizes it so it's practical to use across many applications without repeating work.
 
-The result: onboarding a new application's hardening record is answering ~11 closed questions, not writing
-a document from scratch.
+## What's inside
 
-## Repository structure
+| What | Where | What it's for |
+| --- | --- | --- |
+| The rulebook | [`docs/hardening-baseline-governance.md`](docs/hardening-baseline-governance.md) | Explains, in writing, what "secure enough" means at this company and why — the reasoning behind the checklist. |
+| The checklist spreadsheet | [`templates/ASVS_Master_Hardening_Template.xlsx`](templates/ASVS_Master_Hardening_Template.xlsx) | The actual tool you fill in for one application. |
+| The published-record template | [`docs/confluence-page-template.md`](docs/confluence-page-template.md) + [`templates/confluence-page-template.xml`](templates/confluence-page-template.xml) | Once the spreadsheet is filled in, this is how the result becomes an official, shareable page. |
 
-```
-app-hardening-baseline/
-├── README.md
-├── docs/
-│   ├── hardening-baseline-governance.md   # Why ASVS, baseline categories, coverage matrix, governance model
-│   └── confluence-page-template.md        # Spec for the per-application Confluence page
-└── templates/
-    ├── ASVS_Master_Hardening_Template.xlsx  # The 345-requirement master checklist with applicability formulas
-    └── confluence-page-template.xml         # Ready-to-import Confluence storage-format page template
-```
+## How to check one application, step by step
 
-## How the master template works
+1. **Make a copy of the spreadsheet** (`templates/ASVS_Master_Hardening_Template.xlsx`) and rename it after
+   the application you're assessing.
+2. **Open the "Characterization Form" tab** and answer the questions in the yellow cells. These are simple
+   questions about the application — for example, whether it has a public website, whether it stores
+   sensitive information, or how serious it would be if something went wrong with it. There is no free
+   text to write; every question has a small, fixed list of answers to pick from.
+3. **Open the "Master Template" tab.** As soon as you finish step 2, this tab automatically:
+   - Marks each of the 345 checklist items as either **Applicable** (this app needs it) or **N/A** (doesn't
+     apply, based on your answers) — nothing to calculate by hand.
+   - Assigns each applicable item a **Criticality** — Low, Medium, High, or Critical — so you know which
+     ones to worry about first. The same checklist item can be more or less critical depending on the
+     application; a login-security gap matters more on a public website handling customer data than on an
+     internal tool nobody outside the company can reach.
+4. **Filter the "Applicable?" column to "Applicable"** (a normal spreadsheet filter) so you're only looking
+   at the items that matter for this application.
+5. **For each applicable item, fill in three things**: whether it's actually covered today (Full coverage /
+   Partial coverage / Gap), what proves it (a tool name, a test, a scan result), and any notes.
+6. **Publish the result.** Once the spreadsheet is filled in, it becomes the application's official record —
+   see [`docs/confluence-page-template.md`](docs/confluence-page-template.md) for how that record gets
+   turned into a shareable page.
 
-The workbook has three sheets:
+Everything past step 3 is manual review work — the spreadsheet does the filtering and prioritizing for you,
+but a person still has to check each applicable item and record the real answer.
 
-| Sheet | Purpose |
-| --- | --- |
-| **Instructions** | Step-by-step usage guide and scope notes |
-| **Characterization Form** | ~11 closed-vocabulary questions about the application (target ASVS level, exposes an API, uses OAuth/OIDC, session model, data sensitivity, network exposure, business impact, etc.) |
-| **Master Template** | All 345 ASVS 5.0.0 requirements, each tagged with chapter, section, level, control type, and live `Applicable?` and `Criticality` formulas |
+## A few terms explained
 
-Applicability is computed on **two axes at once**:
+- **ASVS** — the security checklist standard this baseline is built on, maintained by OWASP (a nonprofit,
+  vendor-neutral security organization). Think of it as an industry-standard rulebook, the same way a
+  building code is a standard rulebook for construction.
+- **Level (L1 / L2 / L3)** — how strict the checklist should be for a given application. L1 is the baseline
+  every application should meet. L2 is stricter, for applications handling sensitive data. L3 is the
+  strictest, for high-stakes applications (e.g., handling regulated financial or health data). You pick this
+  once per application, in the Characterization Form.
+- **Criticality (Low / Medium / High / Critical)** — how urgently a specific checklist item should be
+  addressed for this specific application. It's computed automatically; you don't set it by hand.
+- **Coverage status** — whether an applicable item is actually being checked today: fully (a tool or test
+  verifies it automatically), partially, or not at all (a gap).
 
-1. **Chapter gating** — each of the 17 ASVS chapters is either always applicable (e.g., Authentication,
-   Access Control, Cryptography) or conditional on one characterization answer (e.g., Chapter V10 – OAuth
-   and OIDC only applies if the app answers "uses OAuth/OIDC = Yes").
-2. **Level gating** — a requirement is only in scope if its ASVS level (L1/L2/L3) is at or below the
-   application's target level.
+## Where the target level and criticality come from
 
-Both conditions are plain Excel formulas over named ranges, so changing an answer in the Characterization
-Form re-filters the entire 345-row template instantly — no macros, no external tooling required to use it.
+If the company already has an official way of rating how sensitive or important an application is, use
+that rating to decide the target ASVS level. Otherwise, a simple rule of thumb: no sensitive data and no
+outside users → L1; the app handles sensitive data, logins, or is reachable by outside partners → L2;
+regulated financial or health data, or actions that can't be undone if something goes wrong → L3.
 
-Every applicable requirement also gets a **Criticality** (Low/Medium/High/Critical), computed the same
-way — as a fixed per-chapter Requirement Impact crossed against this application's Risk Tier (derived
-from the Data Sensitivity, Exposure, and Business Impact answers). The same ASVS requirement can land at
-a different Criticality on different applications. See
-[`docs/hardening-baseline-governance.md`](docs/hardening-baseline-governance.md#risk-tiering--criticality)
-for the full model.
+Criticality per item works the same way but automatically, from three questions: how sensitive the data is,
+how exposed the application is (internal-only vs. public internet), and how bad it would be if the
+application were breached or went down. The riskiest of those three answers decides how seriously every
+applicable item is treated. Full details and the exact scoring rules are in
+[`docs/hardening-baseline-governance.md`](docs/hardening-baseline-governance.md#risk-tiering--criticality).
 
-## Choosing the target ASVS level
+## Who to ask about Critical/High items
 
-ASVS levels are a risk-based scale, not a size-based one:
+The company's governance team is still finalizing what specifically must happen when an item is marked
+Critical or High (e.g., how fast it must be fixed, who needs to sign off if it's not fixed right away).
+Until that's published, treat Critical/High as "fix these first" — the formal rules will be added to
+[`docs/hardening-baseline-governance.md`](docs/hardening-baseline-governance.md) once defined.
 
-- **L1** — baseline, fully automatable, applies to every application.
-- **L2** — standard for applications that handle sensitive data or meaningful transactions (recommended
-  corporate default).
-- **L3** — high-assurance applications (regulated financial data, health data, critical infrastructure).
+## Where the checklist content comes from
 
-Where a formal data-classification or business-impact tier already exists for an application, derive the
-target level from that. Otherwise, use the characterization answers as a proxy: no sensitive data / no
-API / no transactions → L1; sensitive data or API/SSO/multi-tenant exposure → L2; regulated financial data
-or high-impact irreversible actions → L3.
+The 345 requirements, their chapters, and their levels are copied word-for-word from the official
+[OWASP ASVS](https://github.com/OWASP/ASVS) version 5.0.0. Nothing about the requirements themselves has
+been changed. What this repository adds on top is: the automatic filtering, the criticality scoring, and
+the company's own rulebook explaining how each requirement should be checked in practice.
 
-## Applying this to a specific application
+## Keeping it up to date
 
-1. Copy `templates/ASVS_Master_Hardening_Template.xlsx`, renamed for the application.
-2. Fill in the **Characterization Form** sheet.
-3. Filter the **Master Template** sheet's `Applicable?` column to `Applicable`.
-4. For each applicable requirement, record the real coverage status, the tool/evidence used, and any
-   notes.
-5. Publish the filtered result as the application's formal hardening record: a Confluence page per
-   application, built from [`docs/confluence-page-template.md`](docs/confluence-page-template.md) (spec)
-   and [`templates/confluence-page-template.xml`](templates/confluence-page-template.xml) (ready-to-import
-   Confluence storage format).
-
-## Source
-
-Requirement text, chapter/section structure, and levels are taken verbatim from the official
-[OWASP ASVS](https://github.com/OWASP/ASVS) v5.0.0 release. This repository adds the applicability
-formulas, control-type mapping, and governance model on top of that source; it does not modify the
-underlying ASVS requirement text.
-
-## Roadmap
-
-- [ ] Auto-suggested target ASVS level (currently a documented manual decision, based on the
-      characterization answers) — the new `APP_RISK_TIER` computed field is a candidate input, but is
-      not wired to `TARGET_LEVEL` yet.
-- [ ] Section-level applicability refinement for chapters where a whole-chapter condition is too coarse.
-- [ ] Governance rules by criticality (SLA, escalation, exception approval for Critical/High items) —
-      the `Criticality` field exists and is computed; the process rules that act on it are still TBD,
-      see [`docs/hardening-baseline-governance.md`](docs/hardening-baseline-governance.md#risk-tiering--criticality).
-- [ ] Optional: automate Confluence page creation/update from the filtered spreadsheet via the Confluence
-      REST API (the current workflow is a one-time template setup, then manual per-application copy).
-
-## Status
-
-Internal baseline, actively maintained. Update the master template centrally — changes propagate to every
-application's next copy/refresh, so per-application copies should not be edited to add new requirements
-directly.
+This is one shared, living baseline — not a one-time document. If something about the checklist needs to
+change (a new requirement, an updated rule), it's changed once in the master spreadsheet, and every
+application's *next* copy or refresh picks up the change automatically. Individual application copies
+should not be edited to add new checklist items directly.
