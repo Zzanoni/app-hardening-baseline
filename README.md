@@ -1,5 +1,8 @@
 # Application Hardening Baseline
 
+[![License: CC BY-SA 4.0](https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg)](LICENSE)
+[![OWASP ASVS 5.0.0](https://img.shields.io/badge/OWASP%20ASVS-5.0.0-blue.svg)](https://github.com/OWASP/ASVS)
+
 A stack-agnostic application-hardening baseline, built on the full **OWASP ASVS 5.0.0** requirement
 set (345 requirements, 17 chapters), designed to scale across 100+ applications without rewriting a
 document for each one.
