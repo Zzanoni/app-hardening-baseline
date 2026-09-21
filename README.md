@@ -81,13 +81,6 @@ application were breached or went down. The riskiest of those three answers deci
 applicable item is treated. Full details and the exact scoring rules are in
 [`docs/hardening-baseline-governance.md`](docs/hardening-baseline-governance.md#risk-tiering--criticality).
 
-## Who to ask about Critical/High items
-
-The company's governance team is still finalizing what specifically must happen when an item is marked
-Critical or High (e.g., how fast it must be fixed, who needs to sign off if it's not fixed right away).
-Until that's published, treat Critical/High as "fix these first" — the formal rules will be added to
-[`docs/hardening-baseline-governance.md`](docs/hardening-baseline-governance.md) once defined.
-
 ## Where the checklist content comes from
 
 The 345 requirements, their chapters, and their levels are copied word-for-word from the official
