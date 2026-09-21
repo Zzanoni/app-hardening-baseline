@@ -81,11 +81,10 @@ a **coverage gap**, not an item resolved by documentation alone.
 
 ## Risk tiering / Criticality
 
-Coverage status alone ("Full / Partial / Gap") does not tell a team which gaps to fix first. The
-governance team defining the formal rules for this process requested that every applicable hardening
-item also carry a **criticality classification** (Low / Medium / High / Critical), because Critical
-and High items need to follow stricter governance rules (remediation SLA, escalation, exception
-approval — see "Governance rules by criticality" below).
+Coverage status alone ("Full / Partial / Gap") does not tell a team which gaps to fix first. Every
+applicable hardening item also carries a **criticality classification** (Low / Medium / High /
+Critical), because Critical and High items typically need to follow stricter rules (remediation SLA,
+escalation, exception approval — see "Governance rules by criticality" below).
 
 Criticality is **not fixed per ASVS requirement** — the same requirement carries different real-world
 risk depending on the application it applies to (a broken-access-control gap is worse on a public,
@@ -113,7 +112,7 @@ Only requirements already marked `Applicable` receive a Criticality value; `N/A`
 
 ### Governance rules by criticality
 
-*(TBD — to be defined by the governance team.)* This subsection should document, per criticality
+*(TBD — fill in per your organization's governance process.)* This subsection should document, per criticality
 level, what changes in how a Gap is handled: e.g., remediation SLA, who must be notified, what level
 of sign-off is required to formally accept the risk instead of fixing it, and whether Critical/High
 gaps block a release. Until this is filled in, the Criticality column is informational — it identifies
