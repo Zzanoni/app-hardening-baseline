@@ -12,12 +12,37 @@
           <td>{{L1 / L2 / L3}}</td>
         </tr>
         <tr>
+          <th>App Risk Tier</th>
+          <td>
+            <ac:structured-macro ac:name="status" ac:schema-version="1" ac:local-id="pp-risk-tier">
+              <ac:parameter ac:name="colour">Grey</ac:parameter>
+              <ac:parameter ac:name="title">{{Low / Medium / High / Critical}}</ac:parameter>
+            </ac:structured-macro>
+          </td>
+        </tr>
+        <tr>
+          <th>Sourcing Model</th>
+          <td>{{In-house / COTS / COTS with customizations / Vendor appliance / SaaS}}</td>
+        </tr>
+        <tr>
+          <th>Architecture Pattern(s)</th>
+          <td>{{Primary pattern}} {{+ secondary pattern, if any}}</td>
+        </tr>
+        <tr>
+          <th>Security Review Required</th>
+          <td>{{Yes / No}} {{— reasons, when Yes}}</td>
+        </tr>
+        <tr>
           <th>Owner / Team</th>
           <td>{{Owner or team name}}</td>
         </tr>
         <tr>
           <th>Last Reviewed</th>
           <td>{{YYYY-MM-DD}}</td>
+        </tr>
+        <tr>
+          <th>Template Version</th>
+          <td>{{e.g. 2.0.0}}</td>
         </tr>
         <tr>
           <th>Overall Status</th>
@@ -38,7 +63,8 @@
 <ac:structured-macro ac:name="toc" ac:schema-version="1" ac:local-id="toc-001" />
 
 <h2>1. Application Characterization</h2>
-<p>Copied from the <em>Characterization Form</em> sheet of the master hardening template.</p>
+<p>Copied from the <em>Characterization Form</em> and <em>Extended Characterization</em> sheets of the
+master hardening template.</p>
 <table>
   <tbody>
     <tr>
@@ -91,6 +117,281 @@
     </tr>
   </tbody>
 </table>
+
+<ac:structured-macro ac:name="expand" ac:schema-version="1" ac:local-id="extended-characterization-block">
+  <ac:parameter ac:name="title">Extended Characterization — answers</ac:parameter>
+  <ac:rich-text-body>
+    <p>Copied from the <em>Extended Characterization</em> sheet. Write N/A for rows the sheet marks as not
+    applicable.</p>
+    <table>
+      <tbody>
+        <tr>
+          <th>Question</th>
+          <th>Answer</th>
+        </tr>
+        <tr>
+          <th colspan="2">A. Application identification</th>
+        </tr>
+        <tr>
+          <td>Application ID in the CMDB / inventory</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>What does the application do, and for whom?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Business owner (name / area)</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Technical owner (name / team)</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Lifecycle status</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <th colspan="2">B. Business</th>
+        </tr>
+        <tr>
+          <td>Does it initiate, approve or change financial transactions or payments?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <th colspan="2">C. Sourcing model</th>
+        </tr>
+        <tr>
+          <td>How is the application built and run?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <th colspan="2">D. Architecture archetype</th>
+        </tr>
+        <tr>
+          <td>Which pattern best describes the application?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Does it also match a second pattern?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Does it have relevant components or flows not described by the selected pattern(s)?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Describe what is different</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <th colspan="2">E. Users and admin access</th>
+        </tr>
+        <tr>
+          <td>Is it used by customers (end users outside the company)?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Is it used by employees?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Is it used by partner organizations?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Does it have an administration interface or console?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>From where can the admin interface be reached?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <th colspan="2">F. Authentication</th>
+        </tr>
+        <tr>
+          <td>Do users log in with corporate SSO?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Does the application keep its own usernames/passwords?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Is MFA required for user login?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>How do systems authenticate to its APIs?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Does it use service accounts / technical users to access other systems?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <th colspan="2">G. Authorization and tenancy</th>
+        </tr>
+        <tr>
+          <td>Are there different user roles / permission levels?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Does one instance serve multiple separate clients/organizations whose data must be isolated?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <th colspan="2">H. Data flows</th>
+        </tr>
+        <tr>
+          <td>Does it exchange files in batch (SFTP, shared folder, object storage)?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Does it publish or consume messages/events (queues, topics)?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Does it call services outside the company (third-party APIs, internet)?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Does it store credentials, keys or tokens used to access other systems?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Main integrations (system + direction)</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <th colspan="2">J. Hosting</th>
+        </tr>
+        <tr>
+          <td>Where does it run?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Does it run in containers (Kubernetes, OpenShift, etc.)?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Is there a WAF or API gateway in front of it?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Is an OpenAPI/Swagger specification available?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Is the infrastructure defined as code (Terraform, etc.)?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <th colspan="2">K. COTS and vendor</th>
+        </tr>
+        <tr>
+          <td>Vendor and product name</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Product version in use</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Is this version still supported by the vendor (not end-of-life)?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Who applies security patches?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Is there a defined SLA for applying security patches?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Does the vendor have remote access to the environment?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Were all default/vendor accounts and passwords changed or disabled?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Did we develop customizations (plugins, scripts, extensions)?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Is the customization code in a company repository?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Does the vendor provide an SBOM / list of components?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Does the vendor provide security evidence (pentest report, SOC 2, ISO 27001)?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Does the product send data to the vendor (telemetry, license check, updates)?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <th colspan="2">L. Logging and monitoring</th>
+        </tr>
+        <tr>
+          <td>Does it log logins, failed logins and logouts?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Does it log administrative actions and configuration changes?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Are application logs sent to the central log/monitoring platform?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Do the servers/containers have EDR/endpoint monitoring?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Is file integrity monitoring enabled on the servers?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <th colspan="2">M. Final</th>
+        </tr>
+        <tr>
+          <td>Any known security concern, past incident or pending audit finding?</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Name and role of who filled this questionnaire</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <td>Date filled</td>
+          <td>{{answer, or N/A}}</td>
+        </tr>
+        <tr>
+          <th colspan="2">Result</th>
+        </tr>
+        <tr>
+          <td>Security review required <em>(computed)</em></td>
+          <td>{{Yes / No}}</td>
+        </tr>
+        <tr>
+          <td>Review reasons <em>(computed)</em></td>
+          <td>{{reasons, or None}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </ac:rich-text-body>
+</ac:structured-macro>
 
 <h2>2. Coverage Summary</h2>
 <table>
@@ -250,17 +551,80 @@ addition. Delete this whole block if the application's Custom Controls sheet has
   </ac:rich-text-body>
 </ac:structured-macro>
 
-<h2>5. Gaps and Action Items</h2>
-<p>Every row marked Gap in sections 3 or 4, tracked as an assignable task.</p>
+<h2>5. Threat Model</h2>
+<p><em>Generated by the threat modeling engine — see <a href="https://github.com/Zzanoni/app-threat-modeling">https://github.com/Zzanoni/app-threat-modeling</a>.</em>
+Populated from the threat modeling engine output. One row per threat identified for this application.</p>
+<table>
+  <tbody>
+    <tr>
+      <th>Threat ID</th>
+      <th>STRIDE</th>
+      <th>Threat</th>
+      <th>Risk</th>
+      <th>Mitigation status</th>
+      <th>Linked controls</th>
+    </tr>
+    <tr>
+      <td>{{threat ID}}</td>
+      <td>{{S / T / R / I / D / E}}</td>
+      <td>{{threat description}}</td>
+      <td>
+        <ac:structured-macro ac:name="status" ac:schema-version="1" ac:local-id="threat-risk-example">
+          <ac:parameter ac:name="colour">Grey</ac:parameter>
+          <ac:parameter ac:name="title">Low</ac:parameter>
+        </ac:structured-macro>
+      </td>
+      <td>
+        <ac:structured-macro ac:name="status" ac:schema-version="1" ac:local-id="threat-mitigation-example">
+          <ac:parameter ac:name="colour">Red</ac:parameter>
+          <ac:parameter ac:name="title">Unmitigated</ac:parameter>
+        </ac:structured-macro>
+      </td>
+      <td>{{e.g. V6.2.1, TMX-VENDOR-001}}</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>6. Detection Plan</h2>
+<p><em>Generated by the threat modeling engine — see <a href="https://github.com/Zzanoni/app-threat-modeling">https://github.com/Zzanoni/app-threat-modeling</a>.</em>
+Detections proposed for the SOC, complementing the preventive controls above. SIEM-agnostic: names the
+events and log sources, not a product's query.</p>
+<table>
+  <tbody>
+    <tr>
+      <th>Detection ID</th>
+      <th>Detects</th>
+      <th>Required log sources</th>
+      <th>Log sources available?</th>
+      <th>Status</th>
+    </tr>
+    <tr>
+      <td>{{detection ID}}</td>
+      <td>{{threat(s) / behavior detected}}</td>
+      <td>{{e.g. application auth log, admin audit log}}</td>
+      <td>{{Yes / No / Partially}}</td>
+      <td>
+        <ac:structured-macro ac:name="status" ac:schema-version="1" ac:local-id="detection-status-example">
+          <ac:parameter ac:name="colour">Grey</ac:parameter>
+          <ac:parameter ac:name="title">Proposed</ac:parameter>
+        </ac:structured-macro>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>7. Gaps and Action Items</h2>
+<p>Every row marked Gap in sections 3 or 4, tracked as an assignable task. Ordered by Criticality, then by
+the highest risk among its linked threats (section 5).</p>
 <ac:task-list>
   <ac:task>
     <ac:task-id>1</ac:task-id>
     <ac:task-status>incomplete</ac:task-status>
-    <ac:task-body>{{ASVS ID}} — {{short description of the gap}} — owner: {{name}} — due: {{date}}</ac:task-body>
+    <ac:task-body>{{ASVS ID / Control ID}} — {{short description of the gap}} — criticality: {{Critical / High / Medium / Low}} — remediation owner: {{Internal dev / Configuration / Vendor / Compensating / Risk acceptance}} — linked threats: {{threat IDs, or none}} — owner: {{name}} — due: {{date}}</ac:task-body>
   </ac:task>
 </ac:task-list>
 
-<h2>6. Review History</h2>
+<h2>8. Review History</h2>
 <table>
   <tbody>
     <tr>
