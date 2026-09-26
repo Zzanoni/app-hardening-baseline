@@ -60,7 +60,7 @@ company maps the product it already uses onto each row.
 
 | Baseline category | Technical control type | Stage | Nature |
 | --- | --- | --- | --- |
-| Architecture and design | Questionnaire-driven threat modeling ([threat engine](https://github.com/Zzanoni/app-threat-modeling)) + Security review for flagged cases | Design, pre-code; per assessment | Deterministic, per assessment + manual review of exceptions |
+| Architecture and design | Questionnaire-driven threat modeling in the workbook (`Threat Model` sheet) + Security review of flagged cases | Design, pre-code; per assessment | Deterministic, per assessment + manual review of exceptions |
 | Authentication | SAST (policy rule) + dedicated integration test | CI/CD pipeline | Deterministic, continuous |
 | Session management | Authenticated DAST + integration test | Pipeline / scheduled scan | Deterministic, continuous |
 | Access control (IDOR, privilege escalation) | Pentest / advanced authenticated DAST | Periodic | Sampled |
@@ -142,10 +142,10 @@ The separation is deliberate:
 | `TMX-` | `TMX-<AREA>-NNN` | Control originated by threat modeling — typically COTS/vendor, compensating or infrastructure controls ASVS doesn't express | `TMX-WAF-001`, `TMX-VENDOR-001` |
 
 `TMX-*` controls come from the threat modeling catalog (see "Relationship with threat modeling" below);
-they are added here, like any custom control, so that the hardening record and the threat model share one
-control catalog. The rows `EXAMPLE-01` and `TMX-EXAMPLE-001` shipped in the template are worked examples,
-ignored by the threat engine. The accepted patterns are part of the contract
-([`contract/workbook-contract.yml`](../contract/workbook-contract.yml)).
+they live here, like any custom control, so that the hardening record and the threat model share one control
+catalog, and they are maintained centrally together with the threat catalog. The template ships starter rows
+(`TMX-VENDOR-001`, `TMX-VENDOR-002`, `TMX-WAF-001`, `TMX-EGRESS-001`, all Draft); `EXAMPLE-01` is a worked
+example. ID conventions are listed in [`workbook-structure.md`](workbook-structure.md#id-conventions).
 
 `Custom Controls` mirrors `Master Template`'s columns and reuses the same underlying mechanics
 (`TARGET_LEVEL_NUM` for level gating, `CRIT_MATRIX`/`APP_RISK_TIER` for Criticality) — a custom control
@@ -187,39 +187,43 @@ actionable backlog: it routes each item to a team, a vendor ticket, or a risk-ac
 
 ## Relationship with threat modeling
 
-Architecture and design weaknesses are covered by a questionnaire-driven threat model, produced by a
-separate project: [**app-threat-modeling**](https://github.com/Zzanoni/app-threat-modeling). It is deterministic (the same answers always produce
-the same threats) and STRIDE-based, and it is built to share everything it can with this baseline instead of
-duplicating it:
+Architecture and design weaknesses are covered by a questionnaire-driven threat model that lives **in the same
+workbook** as the hardening checklist and is computed entirely by formulas (method:
+[`threat-modeling-method.md`](threat-modeling-method.md)). It is deterministic — the same answers always produce
+the same threats — and STRIDE-based, and it shares everything it can with the baseline instead of duplicating it:
 
-- **Shared intake.** The threat engine reads this repository's workbook — both characterization sheets
-  (`Characterization Form` and `Extended Characterization`) — so the application team fills in one file
-  per application, not a second questionnaire.
-- **Shared risk tier.** The threat engine uses the same `APP_RISK_TIER`; there is no second risk rating.
-- **Shared control catalog.** Threat mitigations point to `Master Template` (ASVS) and `Custom Controls`
-  (including `TMX-*`) rows, and the engine reads their Coverage Status and Remediation Owner. There is no
-  second control list.
-- **Prioritization.** A gap linked to a high-risk threat is prioritized above gaps of the same Criticality
-  that no identified threat depends on.
-- **Detection plan.** Alongside preventive controls, the threat engine proposes detections for the
-  threats that matter most. The detection plan is owned by the SOC and is SIEM-agnostic (it names the
-  events and log sources needed, not a product's query language). It complements the hardening controls; it
-  never replaces them.
+- **Shared intake.** The threat model uses the two characterization sheets (`Characterization Form` and
+  `Extended Characterization`); there is no second questionnaire.
+- **Shared risk tier.** Threat risk is the threat's own likelihood × impact crossed with the same
+  `APP_RISK_TIER`; there is no second risk rating.
+- **Shared control catalog.** `Threat-Control Map` links each threat to rows of `Master Template` (ASVS) and
+  `Custom Controls` (including `TMX-*`); a threat's mitigation status comes from their Coverage Status. There is
+  no second control list.
+- **Prioritization.** Each control gets a *Threat priority* (the highest risk among the applicable threats it
+  mitigates). A gap's *Backlog priority* is the higher of its Criticality and its Threat priority, so a gap that
+  leaves a high-risk threat open rises above gaps of the same Criticality that no threat depends on.
+- **Detection plan.** Alongside preventive controls, the catalog links threats to detections (SIEM-agnostic
+  Sigma rules in [`detections/sigma/`](../detections/sigma/)) and each detection to the log sources it needs.
+  The `Detection Plan` sheet lists the detections relevant to the application; the SOC owns their deployment.
+  Detections complement the hardening controls; they never replace them.
+
+**The sheets involved.** `Threat Model` (applicable threats, risk, mitigation status), `Controls to Verify`
+("verify first" list), `Backlog` (controls to fix and log sources to enable), `Detection Plan`, and the central
+catalog: `Threat Library`, `Threat-Control Map`, `Detections`, `Threat-Detection Map`, `Log Sources`,
+`TM Config`, checked by `Catalog Health`. See [`workbook-structure.md`](workbook-structure.md).
 
 **Process order.** The threat model depends on the characterization, **not** on a completed hardening
 assessment:
 
 1. **Characterization** — the application team fills in both characterization sheets (about 20–30 minutes).
-2. **Threat model, characterization-only mode** — produces the threats, the detection plan, and a
-   "controls to verify first" list.
-3. **Hardening assessment** — Coverage Status is filled in starting with the "controls to verify first",
-   then the remaining applicable rows.
-4. **Threat model, full mode** — with Coverage Status available, links remaining gaps to the threats they
-   leave open and produces the prioritized backlog.
+2. **Threat model, mode *Characterization-only*** — the `Threat Model` sheet already lists the applicable
+   threats, `Detection Plan` the relevant detections, and `Controls to Verify` the checklist rows to assess first.
+3. **Hardening assessment** — Coverage Status is filled in starting with the "verify first" rows, then the
+   remaining applicable rows.
+4. **Threat model, mode *Full*** — as soon as linked controls are assessed, each threat shows its mitigation
+   status and `Backlog` lists the gaps in priority order.
 
-The link between the two repositories is the machine-readable contract in [`contract/`](../contract/)
-(see [`contract/README.md`](../contract/README.md)); any change to it is a breaking change for the threat
-engine and is versioned.
+Nothing has to be run between these steps: every sheet is recalculated by Excel as answers change.
 
 ### Security review triggers
 
@@ -237,11 +241,10 @@ the following holds:
 7. `VENDOR_SUPPORTED` = *No* or *Don't know* (when applicable).
 
 A question that is not applicable (greyed out, e.g. vendor questions for an in-house application) never
-fires a trigger, even if an old answer is still in its cell. The same triggers are defined, in
-machine-readable form, in [`contract/workbook-contract.yml`](../contract/workbook-contract.yml)
-(`review_triggers`) and in the threat engine's
-[`catalog/config/review_triggers.yml`](https://github.com/Zzanoni/app-threat-modeling/blob/main/catalog/config/review_triggers.yml) — **both must stay
-equal**; change them together.
+fires a trigger, even if an old answer is still in its cell. Each trigger is one row of the "Security review
+triggers" block at the bottom of `Extended Characterization` (ID, reason and a short Yes/No formula), so a
+trigger can be changed or added directly in Excel; `NEEDS_SECURITY_REVIEW` and `REVIEW_REASONS` are derived from
+those rows.
 
 ## Gaps and the governance role of this document
 
