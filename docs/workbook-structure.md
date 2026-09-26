@@ -19,7 +19,7 @@ Requires Excel for Microsoft 365. No macros.
 | 3 | `Extended Characterization` | — | App team | 53 more questions, Applicable/Status per row, result block, review triggers. |
 | 4 | `Threat Model` | blue | — (view) | Applicable threats with risk and mitigation status; summary block. |
 | 5 | `Controls to Verify` | blue | — (view) | Checklist rows to assess first; `TM_MODE`. |
-| 6 | `Master Template` | — | App team (columns L, M, N, Q) | OWASP ASVS 5.0.0 checklist (345 rows). |
+| 6 | `ASVS Checklist` | — | App team (columns L, M, N, Q) | OWASP ASVS 5.0.0 checklist (345 rows). |
 | 7 | `Custom Controls` | — | App team (status) / Security (rows) | Organization and threat-modeling controls (200 rows). |
 | 8 | `Backlog` | blue | — (view) | Controls to fix, log sources to enable. |
 | 9 | `Detection Plan` | blue | — (view) | Detections relevant to the application. |
@@ -58,9 +58,9 @@ Section header rows (A–M) separate the questions; each answer in column D is a
 - **Security review triggers** (rows 79–86): one row per trigger — ID (A), reason (B), Yes/No formula (D),
   cumulative reasons helper (E). `NEEDS_SECURITY_REVIEW` = Yes when any trigger row says Yes.
 
-## Control sheets (`Master Template`, `Custom Controls`)
+## Control sheets (`ASVS Checklist`, `Custom Controls`)
 
-Header row 4. `Master Template` rows 5–349; `Custom Controls` rows 5–204 (pre-filled formulas; a row is ignored
+Header row 4. `ASVS Checklist` rows 5–349; `Custom Controls` rows 5–204 (pre-filled formulas; a row is ignored
 while its Control ID is blank).
 
 | Col | Header | Input? | Content |
@@ -85,7 +85,7 @@ while its Control ID is blank).
 | U | Backlog priority | — | Gap / Partial only: higher of P and S |
 | V | Linked threat IDs | — | IDs of those threats |
 
-`Master Template` columns A–G are a verbatim copy of OWASP ASVS 5.0.0 — never edit them, never add rows.
+`ASVS Checklist` columns A–G are a verbatim copy of OWASP ASVS 5.0.0 — never edit them, never add rows.
 
 ## Catalog tables
 
@@ -166,7 +166,7 @@ Each view is one dynamic-array formula that spills below its header; never type 
 (+ `BASE_RISK_ROWS` = Impact, `BASE_RISK_COLS` = Likelihood), `FINAL_RISK_MATRIX` (+ `FINAL_RISK_ROWS` = Base risk,
 `FINAL_RISK_COLS` = Risk Tier), `SIGMA_BASE_URL`.
 
-**Column ranges of the control sheets** — `MT_*` (rows 5–349) and `CC_*` (rows 5–204): `IDS` (A), `LEVEL` (D),
+**Column ranges of the control sheets** — `MT_*` (`ASVS Checklist`, rows 5–349; the prefix comes from the sheet's former name, *Master Template*) and `CC_*` (`Custom Controls`, rows 5–204): `IDS` (A), `LEVEL` (D),
 `REQ` (E), `FORMULA` (G), `APPLICABLE` (H), `TYPE` (I), `STAGE` (K), `COVERAGE` (L), `CRIT` (P), `OWNER` (Q),
 `LINKED` (R), `TPRIO` (S), `VERIFY` (T), `BACKLOG` (U), `TIDS` (V).
 
@@ -192,7 +192,7 @@ Each view is one dynamic-array formula that spills below its header; never type 
 
 | Pattern | Where | Example |
 | --- | --- | --- |
-| `V<chapter>.<section>.<n>` | ASVS requirement (`Master Template`) | `V6.3.1` |
+| `V<chapter>.<section>.<n>` | ASVS requirement (`ASVS Checklist`) | `V6.3.1` |
 | `CUSTOM-NN` | Organization policy / contractual / platform-specific control (`Custom Controls`) | `CUSTOM-01` |
 | `TMX-<AREA>-NNN` | Control originated by threat modeling (`Custom Controls`) | `TMX-VENDOR-001` |
 | `TM-<S/T/R/I/D/E>-NNN` | Threat (`Threat Library`) | `TM-S-001` |

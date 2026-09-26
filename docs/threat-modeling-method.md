@@ -65,7 +65,7 @@ Initial matrices (a proposal — calibrate them during the pilot):
 
 ## Is it mitigated?
 
-`Threat-Control Map` links each threat to the checklist rows (`Master Template` ASVS IDs or `Custom Controls` IDs)
+`Threat-Control Map` links each threat to the checklist rows (`ASVS Checklist` ASVS IDs or `Custom Controls` IDs)
 that protect against it. The threat's **mitigation status** comes from their Coverage Status, counting only the
 controls that apply to this application:
 
@@ -136,7 +136,7 @@ to controls and detections (below). `Catalog Health` flags it until it has at le
 — or, if no sensible detection exists, write `No detection: <reason>` in Notes.
 
 **Link controls** — on `Threat-Control Map`, one row per control: Threat ID, Control ID (an ASVS ID from
-`Master Template` — read the requirement text, never guess — or a `Custom Controls` ID), the default Remediation
+`ASVS Checklist` — read the requirement text, never guess — or a `Custom Controls` ID), the default Remediation
 Owner, and one line on how it mitigates. `Control source` must not say `NOT FOUND`.
 
 **Add a `TMX-*` control** — when no ASVS requirement expresses the protection (typically vendor, compensating or
@@ -160,7 +160,7 @@ Critical) unchanged.
 **Approve content** — once a threat, its links and its detection have been reviewed, set `Review status` to
 `Approved` on `Threat Library` / `Detections`. The starter catalog ships as `Draft`.
 
-**Never** rename sheets, table names, column headers, keys or named ranges; never add rows to `Master Template`.
+**Never** rename sheets, table names, column headers, keys or named ranges; never add rows to `ASVS Checklist`.
 
 ## Upgrading an application copy
 
@@ -170,7 +170,7 @@ files and copy **values** (*Paste Special → Values*), matching by key or ID, n
 1. **Characterization answers** — column D of `Characterization Form` and `Extended Characterization`, matched by
    the key in column A.
 2. **Control assessments** — columns L (Coverage Status), M (Tool / Evidence), N (Notes) and Q (Remediation
-   Owner) of `Master Template` and `Custom Controls`, matched by the ID in column A. For `Custom Controls` rows the
+   Owner) of `ASVS Checklist` and `Custom Controls`, matched by the ID in column A. For `Custom Controls` rows the
    application added itself, copy the whole row (A–G, I–O, Q) into an empty row.
 3. **Detection deployment status** — column `Deployment status` of `Detections`, matched by Detection ID.
 

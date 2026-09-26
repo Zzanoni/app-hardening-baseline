@@ -69,7 +69,7 @@ into the full checklist:
 | 🔴 Critical items | *(count of applicable rows with Criticality = Critical)* |
 | 🟠 High items | *(count of applicable rows with Criticality = High)* |
 
-The Critical/High counts are a read of the `Criticality` column (Master Template column P), not of
+The Critical/High counts are a read of the `Criticality` column (ASVS Checklist column P), not of
 Coverage Status — a Critical item can still be Full coverage; this row exists so a reviewer can see at
 a glance how many high-priority items this application carries, independent of how well they're
 currently covered.
@@ -137,7 +137,7 @@ Red = Rejected. It is recorded per application in the `Deployment status` column
 *Copied from the workbook's `Backlog` sheet*, in the order it shows. Two **Task List** macros:
 
 1. **Controls to fix** — one task per row of the backlog's left block (Coverage Status Gap or Partial coverage,
-   from both `Master Template` and `Custom Controls`), stating its coverage, **Backlog priority** (the higher of
+   from both `ASVS Checklist` and `Custom Controls`), stating its coverage, **Backlog priority** (the higher of
    Criticality and Threat priority), **Remediation Owner** (Internal dev / Configuration / Vendor / Compensating /
    Risk acceptance — see
    [`hardening-baseline-governance.md`](hardening-baseline-governance.md#remediation-owner)) and **linked
@@ -161,7 +161,7 @@ is revisited, rather than editing history away.
 3. Copy the workbook's `Threat Model` sheet into section 7 and its `Detection Plan` sheet into section 8. Right
    after the characterization they are already filled in (mode *Characterization-only*); the workbook's
    `Controls to Verify` sheet tells you which checklist rows to assess first.
-4. Filter the workbook's `Master Template` sheet to `Applicable`, and for each ASVS chapter present, copy its
+4. Filter the workbook's `ASVS Checklist` sheet to `Applicable`, and for each ASVS chapter present, copy its
    rows into the matching Expand block in section 5 (create one Expand block per chapter that has applicable
    rows; delete unused chapter blocks from the template).
 5. If the `Custom Controls` sheet has any applicable rows, copy them into section 6; otherwise delete
