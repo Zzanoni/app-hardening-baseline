@@ -1,0 +1,30 @@
+# Detection ID: DET-VENDOR-001
+# Catalog: 'Detections' sheet of templates/ASVS_Master_Hardening_Template.xlsx
+# Threats: TM-E-002
+# SIEM-agnostic Sigma rule (https://sigmahq.io). Field names follow ECS; adapt them to your log schema.
+# Note: Correlate with the PAM / change calendar in the SIEM: alert only outside approved maintenance windows.
+title: Vendor session outside the approved window
+id: b99e2029-51e4-5c5f-b0f2-1a892a9906bc
+status: experimental
+description: Vendor account login or remote session outside an approved maintenance window.
+author: Application Hardening Baseline
+date: 2026-09-26
+tags:
+  - attack.initial-access
+  - attack.t1133
+  - attack.t1199
+logsource:
+  category: authentication
+  product: application
+detection:
+  selection:
+    event.outcome: success
+    user.name|startswith: 'vendor'   # replace with the vendor account naming convention
+  condition: selection
+fields:
+  - user.name
+  - source.ip
+  - "@timestamp"
+falsepositives:
+  - Emergency vendor support approved outside the usual window.
+level: high

@@ -1,0 +1,30 @@
+# Detection ID: DET-NET-001
+# Catalog: 'Detections' sheet of templates/ASVS_Master_Hardening_Template.xlsx
+# Threats: TM-I-003
+# SIEM-agnostic Sigma rule (https://sigmahq.io). Field names follow ECS; adapt them to your log schema.
+# Note: Maintain the allowlist together with TMX-EGRESS-001.
+title: Unexpected outbound connection from the application host
+id: b2278ebd-4918-556e-9233-b3c5919fab21
+status: experimental
+description: Application host connecting to a destination not on the approved list.
+author: Application Hardening Baseline
+date: 2026-09-26
+tags:
+  - attack.exfiltration
+  - attack.t1041
+logsource:
+  category: proxy
+detection:
+  selection:
+    source.hostname|contains: 'app-'   # replace with the application's host naming convention
+  filter_allowlist:
+    destination.domain|endswith:
+      - '.example-vendor.com'           # replace with approved destinations
+  condition: selection and not filter_allowlist
+fields:
+  - source.hostname
+  - destination.domain
+  - destination.ip
+falsepositives:
+  - New vendor endpoint after a product update.
+level: medium

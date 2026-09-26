@@ -1,0 +1,30 @@
+# Detection ID: DET-APP-001
+# Catalog: 'Detections' sheet of templates/ASVS_Master_Hardening_Template.xlsx
+# Threats: TM-S-004; TM-I-001
+# SIEM-agnostic Sigma rule (https://sigmahq.io). Field names follow ECS; adapt them to your log schema.
+# Note: Exclude known integration accounts.
+title: Mass object access by a single user
+id: aad8d948-fe5c-5fa3-b779-51ac52c3f0f3
+status: experimental
+description: One user or client reading an unusually high number of distinct records in a short time.
+author: Application Hardening Baseline
+date: 2026-09-26
+tags:
+  - attack.collection
+  - attack.t1213
+logsource:
+  category: webserver
+  product: waf
+detection:
+  selection:
+    http.request.method: GET
+    url.path|re: '/api/.*/[0-9]+$'     # replace with the application's object URL pattern
+  condition: selection | count(url.path) by user.name > 200
+  timeframe: 5m
+fields:
+  - user.name
+  - url.path
+  - source.ip
+falsepositives:
+  - Legitimate bulk exports or integrations.
+level: medium

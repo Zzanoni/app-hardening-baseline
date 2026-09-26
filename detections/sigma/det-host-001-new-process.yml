@@ -1,0 +1,37 @@
+# Detection ID: DET-HOST-001
+# Catalog: 'Detections' sheet of templates/ASVS_Master_Hardening_Template.xlsx
+# Threats: TM-T-002; TM-I-002; TM-E-003
+# SIEM-agnostic Sigma rule (https://sigmahq.io). Field names follow ECS; adapt them to your log schema.
+# Note: Scope to the application's hosts and service account.
+title: New process on the application host
+id: a5504417-8c9e-5a26-8574-11f335c9838e
+status: experimental
+description: Shell, scripting or remote-access process started by the application's service account.
+author: Application Hardening Baseline
+date: 2026-09-26
+tags:
+  - attack.execution
+  - attack.t1059
+logsource:
+  category: process_creation
+detection:
+  selection_parent_user:
+    User|contains: 'svc_'              # replace with the application's service account
+  selection_child:
+    Image|endswith:
+      - '/sh'
+      - '/bash'
+      - '\cmd.exe'
+      - '\powershell.exe'
+      - '/python'
+      - '/curl'
+      - '/wget'
+  condition: selection_parent_user and selection_child
+fields:
+  - User
+  - Image
+  - CommandLine
+  - ParentImage
+falsepositives:
+  - Legitimate maintenance scripts run by the service account.
+level: high

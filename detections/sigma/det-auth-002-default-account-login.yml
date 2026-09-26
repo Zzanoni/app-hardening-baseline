@@ -1,0 +1,35 @@
+# Detection ID: DET-AUTH-002
+# Catalog: 'Detections' sheet of templates/ASVS_Master_Hardening_Template.xlsx
+# Threats: TM-S-003
+# SIEM-agnostic Sigma rule (https://sigmahq.io). Field names follow ECS; adapt them to your log schema.
+# Note: Extend the account list with the product's documented default accounts.
+title: Login with a default or vendor account
+id: f1559c65-29bc-5563-be50-cca30f59afc0
+status: experimental
+description: Successful login with a known default, vendor or shared account name.
+author: Application Hardening Baseline
+date: 2026-09-26
+tags:
+  - attack.initial-access
+  - attack.t1078.001
+logsource:
+  category: authentication
+  product: application
+detection:
+  selection:
+    event.outcome: success
+    user.name:
+      - admin
+      - administrator
+      - root
+      - sa
+      - vendor
+      - support
+      - test
+  condition: selection
+fields:
+  - user.name
+  - source.ip
+falsepositives:
+  - Documented break-glass use of a default account.
+level: high

@@ -1,0 +1,32 @@
+# Detection ID: DET-ADMIN-001
+# Catalog: 'Detections' sheet of templates/ASVS_Master_Hardening_Template.xlsx
+# Threats: TM-S-002; TM-E-002
+# SIEM-agnostic Sigma rule (https://sigmahq.io). Field names follow ECS; adapt them to your log schema.
+# Note: Replace the CIDR list with the organization's management networks.
+title: Admin console access from an unusual source
+id: c8888ceb-74ba-59c9-9ec7-28fd57ff6a98
+status: experimental
+description: Administrative login or access from a network outside the approved management ranges.
+author: Application Hardening Baseline
+date: 2026-09-26
+tags:
+  - attack.initial-access
+  - attack.t1133
+logsource:
+  category: authentication
+  product: application
+  service: admin
+detection:
+  selection:
+    event.outcome: success
+    user.roles|contains: admin
+  filter_management_networks:
+    source.ip|cidr:
+      - 10.0.0.0/8      # replace with the approved management ranges
+  condition: selection and not filter_management_networks
+fields:
+  - user.name
+  - source.ip
+falsepositives:
+  - Administrators working from a new approved location.
+level: high
