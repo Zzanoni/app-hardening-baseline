@@ -1,0 +1,29 @@
+# Detection ID: DET-WAF-001
+# Catalog: 'Detections' sheet of templates/ASVS_Master_Hardening_Template.xlsx
+# Threats: TM-S-001; TM-S-004; TM-D-001
+# SIEM-agnostic Sigma rule (https://sigmahq.io). Field names follow ECS; adapt them to your log schema.
+# Note: Tune the threshold to the application's normal error rate.
+title: Spike of 4xx/5xx at the WAF
+id: fee8dae1-39ad-5567-bda6-e9c76fd36e2a
+status: experimental
+description: Sudden increase of client or server errors for the application at the WAF or gateway.
+author: Application Hardening Baseline
+date: 2026-09-26
+tags:
+  - attack.impact
+  - attack.t1499
+logsource:
+  category: webserver
+  product: waf
+detection:
+  selection:
+    http.response.status_code|gte: 400
+  condition: selection | count() by url.domain > 500
+  timeframe: 5m
+fields:
+  - url.domain
+  - http.response.status_code
+  - source.ip
+falsepositives:
+  - Broken client release; scanners run by the security team.
+level: medium

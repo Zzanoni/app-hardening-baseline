@@ -1,0 +1,29 @@
+# Detection ID: DET-AUTH-001
+# Catalog: 'Detections' sheet of templates/ASVS_Master_Hardening_Template.xlsx
+# Threats: TM-S-001
+# SIEM-agnostic Sigma rule (https://sigmahq.io). Field names follow ECS; adapt them to your log schema.
+# Note: Tune the threshold per application. A second variant (one account, many sources) is worth adding in the SIEM.
+title: Login failure spike
+id: 5cc98ca0-ef32-510d-b85a-245fc215ab3c
+status: experimental
+description: Many failed logins for many accounts from one source, or for one account from many sources.
+author: Application Hardening Baseline
+date: 2026-09-26
+tags:
+  - attack.credential-access
+  - attack.t1110
+logsource:
+  category: authentication
+  product: application
+detection:
+  selection:
+    event.outcome: failure
+  condition: selection | count(user.name) by source.ip > 20
+  timeframe: 10m
+fields:
+  - source.ip
+  - user.name
+  - event.outcome
+falsepositives:
+  - Misconfigured service account retrying with an old password; load tests.
+level: medium

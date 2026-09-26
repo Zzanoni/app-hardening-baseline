@@ -1,0 +1,34 @@
+# Detection ID: DET-HOST-002
+# Catalog: 'Detections' sheet of templates/ASVS_Master_Hardening_Template.xlsx
+# Threats: TM-T-003; TM-E-003
+# SIEM-agnostic Sigma rule (https://sigmahq.io). Field names follow ECS; adapt them to your log schema.
+# Note: Suppress during approved change windows.
+title: Integrity change of application binaries
+id: 63d75b3f-0065-5193-b6cf-f147e489cbba
+status: experimental
+description: Application binaries, libraries or plugins changed outside a change window.
+author: Application Hardening Baseline
+date: 2026-09-26
+tags:
+  - attack.persistence
+  - attack.t1554
+logsource:
+  category: file_change
+detection:
+  selection:
+    TargetFilename|contains:
+      - '/opt/application/'           # replace with the application's install path
+    TargetFilename|endswith:
+      - '.jar'
+      - '.war'
+      - '.dll'
+      - '.so'
+      - '.exe'
+  condition: selection
+fields:
+  - TargetFilename
+  - User
+  - Image
+falsepositives:
+  - Deployments and vendor updates during a change window.
+level: medium

@@ -1,0 +1,33 @@
+# Detection ID: DET-ADMIN-002
+# Catalog: 'Detections' sheet of templates/ASVS_Master_Hardening_Template.xlsx
+# Threats: TM-R-001; TM-E-001
+# SIEM-agnostic Sigma rule (https://sigmahq.io). Field names follow ECS; adapt them to your log schema.
+# Note: Map event.action to the product's own audit event names.
+title: Configuration or permission change on the admin interface
+id: 19c53eaa-1acf-5d87-b209-3526e5c255da
+status: experimental
+description: Security-relevant configuration, role or permission changes made through the admin interface.
+author: Application Hardening Baseline
+date: 2026-09-26
+tags:
+  - attack.persistence
+  - attack.t1098
+logsource:
+  category: application
+  product: application
+  service: audit
+detection:
+  selection:
+    event.action:
+      - role_assigned
+      - permission_changed
+      - security_setting_changed
+      - user_created
+  condition: selection
+fields:
+  - user.name
+  - event.action
+  - target.user.name
+falsepositives:
+  - Planned administration during a change window.
+level: medium
