@@ -1,0 +1,4 @@
+# Pinned: the committed workbook must be reproducible by scripts/migrate_v2.py.
+openpyxl==3.1.5
+PyYAML==6.0.3
+jsonschema==4.23.0
