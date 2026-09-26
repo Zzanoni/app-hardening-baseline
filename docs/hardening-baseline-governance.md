@@ -93,14 +93,14 @@ item, from two independent factors:
 
 1. **Requirement Impact** — fixed per ASVS chapter, reflecting how severe it is when that *type* of
    control fails (e.g., Authentication, Authorization, Cryptography, Session Management = High;
-   Configuration = Low). Implemented in the Master Template sheet as column **O**.
+   Configuration = Low). Implemented in the ASVS Checklist sheet as column **O**.
 2. **Application Risk Tier** — derived per application from three Characterization Form answers: Data
    Sensitivity, network Exposure, and Business Impact. The application's tier is the *worst* of the
    three (the single highest-risk factor drives the tier, rather than being diluted by an average).
    Implemented as the computed `APP_RISK_TIER` field on the Characterization Form sheet.
 
 The two factors cross in a risk matrix (also on the Characterization Form sheet, named range
-`CRIT_MATRIX`) to produce the final Criticality value, in Master Template column **P**:
+`CRIT_MATRIX`) to produce the final Criticality value, in ASVS Checklist column **P**:
 
 | Requirement Impact \ App Risk Tier | Low | Medium | High | Critical |
 | --- | --- | --- | --- | --- |
@@ -125,10 +125,10 @@ an organization may need to track — an internal policy, a contractual or regul
 to the organization, or a control for a technology ASVS doesn't address (e.g., a specific internal
 platform) may all need to be part of the same hardening record.
 
-These go on the **`Custom Controls`** sheet of the master workbook, never appended to `Master Template`.
+These go on the **`Custom Controls`** sheet of the master workbook, never appended to `ASVS Checklist`.
 The separation is deliberate:
 
-- `Master Template` must stay a byte-for-byte match of the upstream ASVS content, so a future ASVS
+- `ASVS Checklist` must stay a byte-for-byte match of the upstream ASVS content, so a future ASVS
   release can always be diffed and merged in cleanly, and the "we don't modify the underlying ASVS
   requirement text" claim in this repo stays true without caveats.
 - Custom control IDs are then guaranteed never to collide with a real or future ASVS ID, even across
@@ -147,11 +147,11 @@ catalog, and they are maintained centrally together with the threat catalog. The
 (`TMX-VENDOR-001`, `TMX-VENDOR-002`, `TMX-WAF-001`, `TMX-EGRESS-001`, all Draft); `EXAMPLE-01` is a worked
 example. ID conventions are listed in [`workbook-structure.md`](workbook-structure.md#id-conventions).
 
-`Custom Controls` mirrors `Master Template`'s columns and reuses the same underlying mechanics
+`Custom Controls` mirrors `ASVS Checklist`'s columns and reuses the same underlying mechanics
 (`TARGET_LEVEL_NUM` for level gating, `CRIT_MATRIX`/`APP_RISK_TIER` for Criticality) — a custom control
 gets filtered and prioritized exactly like an ASVS one. The one deliberate difference: its Applicability
 Formula column is a live, directly-editable formula (default `=TRUE()`, i.e. always applicable) rather
-than `Master Template`'s hidden helper column, since a custom control's applicability condition is
+than `ASVS Checklist`'s hidden helper column, since a custom control's applicability condition is
 organization-defined and can't be pre-written into the template the way ASVS chapter gating can.
 
 When publishing to Confluence (see [`confluence-page-template.md`](confluence-page-template.md)), custom
@@ -170,7 +170,7 @@ Coverage Status says *whether* a requirement is met; it doesn't say *who can clo
 applications built in-house that is almost always the development team, but for vendor products (COTS,
 appliances) most application-level gaps can't be fixed by the organization at all. Every row with
 Coverage Status `Partial coverage` or `Gap` therefore also records a **Remediation Owner** (column Q of
-`Master Template` and `Custom Controls`; blank for other rows):
+`ASVS Checklist` and `Custom Controls`; blank for other rows):
 
 | Value | Use when | Typical for |
 | --- | --- | --- |
@@ -196,7 +196,7 @@ the same threats — and STRIDE-based, and it shares everything it can with the 
   `Extended Characterization`); there is no second questionnaire.
 - **Shared risk tier.** Threat risk is the threat's own likelihood × impact crossed with the same
   `APP_RISK_TIER`; there is no second risk rating.
-- **Shared control catalog.** `Threat-Control Map` links each threat to rows of `Master Template` (ASVS) and
+- **Shared control catalog.** `Threat-Control Map` links each threat to rows of `ASVS Checklist` (ASVS) and
   `Custom Controls` (including `TMX-*`); a threat's mitigation status comes from their Coverage Status. There is
   no second control list.
 - **Prioritization.** Each control gets a *Threat priority* (the highest risk among the applicable threats it

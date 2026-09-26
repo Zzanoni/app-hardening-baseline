@@ -15,6 +15,7 @@ directly in Excel.
 - **Removed**: `scripts/` (migrate, export, check, upgrade), `tests/`, `requirements.txt`, the CI workflow and
   the machine-readable `contract/` folder (replaced by the human-readable
   [`docs/workbook-structure.md`](docs/workbook-structure.md)). `CONTRACT_VERSION` removed from `_meta`.
+- **Sheet `Master Template` renamed to `ASVS Checklist`**, so that "master" only means the master template file. The column named ranges keep their `MT_*` prefix.
 - **The separate `app-threat-modeling` repository is abandoned** — it will not be created. All references to it
   are gone; the threat model is now the `Threat Model` sheet, always up to date, with nothing to run.
 
@@ -23,7 +24,7 @@ directly in Excel.
   enable), `Detection Plan`, `Catalog Health` (consistency checks that replace the removed CI).
 - **Central catalog** (Excel Tables, protected without password): `Threat Library`, `Threat-Control Map`,
   `Detections`, `Threat-Detection Map`, `Log Sources`, `TM Config` (risk scale and matrices).
-- **Master Template / Custom Controls**: columns R–V — `Linked threats`, `Threat priority`, `Verify first?`,
+- **ASVS Checklist / Custom Controls**: columns R–V — `Linked threats`, `Threat priority`, `Verify first?`,
   `Backlog priority`, `Linked threat IDs`.
 - **Extended Characterization**: `ARCHETYPE_PRIMARY_ID`, `ARCHETYPE_SECONDARY_ID`, `IS_COTS`; the Security review
   triggers are now one hand-editable row each (the result cells `EXT_MISSING_COUNT`, `NEEDS_SECURITY_REVIEW`,
@@ -38,7 +39,7 @@ directly in Excel.
   Excel 365 acceptance checklist), [`docs/workbook-structure.md`](docs/workbook-structure.md).
 
 ### Unchanged
-- All v1/v2 named ranges, answer cells, computed cells and matrices; `Master Template` columns A–G remain a
+- All v1/v2 named ranges, answer cells, computed cells and matrices; `ASVS Checklist` columns A–G remain a
   verbatim copy of OWASP ASVS 5.0.0. Applicable, Criticality and the Security review result compute exactly as in
   v2.
 

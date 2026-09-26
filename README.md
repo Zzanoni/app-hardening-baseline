@@ -33,18 +33,24 @@ organization's own rules.
 
 ## How it fits together
 
+There is one **master template** file, kept up to date centrally. Nobody fills it in: for each application you
+make **a copy** of it, and everything below happens inside that copy.
+
 ```mermaid
 flowchart LR
-  T[App team answers<br/>two characterization tabs] --> M[Threat Model +<br/>Controls to Verify]
-  M --> H[Hardening assessment<br/>Master Template / Custom Controls]
-  H --> B[Backlog]
-  H --> D[Detection Plan<br/>for the SOC]
-  M --> C[Confluence record]
-  B --> C
-  D --> C
+  M[Master template<br/>one file, kept centrally] -->|one copy per application| C
+  subgraph C[The application's copy]
+    direction LR
+    A[Step 1: Characterization<br/>two question tabs] --> T[Step 2: Threat Model +<br/>Controls to Verify]
+    T --> H[Step 3: Control assessment<br/>ASVS Checklist + Custom Controls]
+    H --> B[Step 4: Backlog +<br/>Detection Plan]
+  end
+  C --> P[Step 5: Confluence page]
 ```
 
-Every box after the first one is a tab of the same spreadsheet that fills itself in.
+Steps 2 and 4 are tabs that fill themselves in from what you entered in steps 1 and 3. The Threat Model
+already has content right after step 1, and updates itself as the controls are assessed. Step 5 publishes the
+result of the whole copy.
 
 ## What's inside
 
@@ -74,7 +80,7 @@ Every box after the first one is a tab of the same spreadsheet that fills itself
 5. **Open the "Threat Model" and "Controls to Verify" tabs.** They are already filled in — there is nothing to
    run. The threat model **does not wait for the full checklist**: right after the questionnaire it lists the
    threats that apply, and "Controls to Verify" lists the checklist items to check first.
-6. **Assess the checklist.** On "Master Template" (and "Custom Controls"), filter "Applicable?" to "Applicable"
+6. **Assess the checklist.** On "ASVS Checklist" (and "Custom Controls"), filter "Applicable?" to "Applicable"
    and, for each item, record whether it's covered today (Full coverage / Partial coverage / Gap), what proves
    it, and any notes. **Start with the items marked "Verify first?" = Yes**, then go through the rest — instead
    of working through 150–250 rows blindly. As you go, the threat model shows which threats are mitigated and
@@ -125,7 +131,7 @@ there is only one risk rating per application. Details are in
 
 ## Adding your own controls and threats
 
-- **Your own checklist items** go on the "Custom Controls" tab, never on "Master Template" (which stays an exact
+- **Your own checklist items** go on the "Custom Controls" tab, never on "ASVS Checklist" (which stays an exact
   copy of ASVS, so it can be refreshed when a new ASVS version comes out). IDs: `CUSTOM-01`, `CUSTOM-02`, … for
   the organization's own rules, and `TMX-…` (e.g. `TMX-VENDOR-001`) for protections that come from threat
   modeling — typically around vendor products.
