@@ -2,6 +2,40 @@
 
 All notable changes to the baseline template. Versions follow [Semantic Versioning](https://semver.org/).
 
+## [4.0.0] — 2026-10-21
+
+The hardening checklist is now a **consolidated baseline**: the 345 OWASP ASVS 5.0.0 requirements are grouped into
+59 controls, each traced to the ASVS requirements it covers. An L2 application goes from about 200 applicable
+requirements to 40–50 controls to assess. ASVS stays the reference — unmodified — and every requirement traces to
+a control or to a documented exclusion.
+
+### Breaking
+- **New sheet `Hardening Baseline`** (between `Controls to Verify` and `ASVS Checklist`) — the checklist the
+  application team assesses: 59 controls `HB-<AREA>-NN` (342 ASVS requirements consolidated, 3 excluded with a
+  rationale). Same columns and mechanics as `Custom Controls` (Coverage Status, Criticality, Remediation Owner,
+  Verify first?, Backlog priority…), plus `ASVS references` (C), `ASVS in scope` (F) and its count (G).
+  Applicability and Level are inherited from the ASVS requirements: a control applies when at least one of its
+  requirements is in scope; Requirement Impact is the highest among them.
+- **`ASVS Checklist` is reference-only**: columns A–H unchanged; columns I–V (assessment, criticality, threat
+  columns) replaced by `Baseline control` (I), `Exclusion rationale` (J) and `Baseline coverage` (K, the coverage of
+  the control that covers each requirement).
+- **Named ranges**: views use `BL_*` (`Hardening Baseline`) instead of `MT_*`. Removed `MT_TYPE`, `MT_STAGE`,
+  `MT_COVERAGE`, `MT_CRIT`, `MT_OWNER`, `MT_LINKED`, `MT_TPRIO`, `MT_VERIFY`, `MT_BACKLOG`, `MT_TIDS`. Added
+  `MT_BASELINE`, `MT_EXCLUSION`, `MT_BASELINE_COVERAGE`.
+- **`Threat-Control Map`** links threats to `HB-*` controls (54 → 42 links: ASVS links that now fall in the same
+  control were merged). `Control source` says `Baseline` instead of `ASVS`.
+
+### Added
+- **`Catalog Health`** checks 11a–11d: duplicate baseline IDs, ASVS requirements not traced to a control,
+  exclusions without a rationale, controls without an ASVS requirement.
+- **Docs**: section *Consolidated baseline and ASVS traceability* in
+  [`docs/hardening-baseline-governance.md`](docs/hardening-baseline-governance.md#consolidated-baseline-and-asvs-traceability);
+  Confluence checklist grouped by baseline category with an `ASVS in scope` column.
+
+### Upgrading a v3 application copy
+By hand, in Excel — v3 assessments were per ASVS requirement; see
+[`docs/threat-modeling-method.md`](docs/threat-modeling-method.md#upgrading-an-application-copy).
+
 ## [3.0.0] — 2026-09-26
 
 Threat modeling moves **inside the workbook**, and the project becomes **Excel only**. Many environments where

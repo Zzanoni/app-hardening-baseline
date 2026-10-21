@@ -27,9 +27,11 @@ does both with **one Excel file per application**. You answer a short questionna
 **Excel only.** Everything is calculated by formulas inside the file: no macros, no scripts, nothing to
 install or run. It needs **Excel for Microsoft 365** (it uses Excel's newer "dynamic array" formulas).
 
-The checklist itself is not invented here — it is the **OWASP ASVS**, an internationally recognized,
-independently maintained list of application-security requirements (345 items in total), plus room for the
-organization's own rules.
+The checklist itself is not invented here — it is based on the **OWASP ASVS**, an internationally recognized,
+independently maintained list of application-security requirements (345 items in total). To keep it practical,
+those 345 requirements are **consolidated into 59 controls** (closely related requirements become one control, and
+a few are left out with a written reason); every control lists the ASVS requirements it comes from, and every ASVS
+requirement points to the control that covers it. There is also room for the organization's own rules.
 
 ## How it fits together
 
@@ -42,7 +44,7 @@ flowchart LR
   subgraph C[The application's copy]
     direction LR
     A[Step 1: Characterization<br/>two question tabs] --> T[Step 2: Threat Model +<br/>Controls to Verify]
-    T --> H[Step 3: Control assessment<br/>ASVS Checklist + Custom Controls]
+    T --> H[Step 3: Control assessment<br/>Hardening Baseline + Custom Controls]
     H --> B[Step 4: Backlog +<br/>Detection Plan]
   end
   C --> P[Step 5: Confluence page]
@@ -80,11 +82,12 @@ result of the whole copy.
 5. **Open the "Threat Model" and "Controls to Verify" tabs.** They are already filled in — there is nothing to
    run. The threat model **does not wait for the full checklist**: right after the questionnaire it lists the
    threats that apply, and "Controls to Verify" lists the checklist items to check first.
-6. **Assess the checklist.** On "ASVS Checklist" (and "Custom Controls"), filter "Applicable?" to "Applicable"
-   and, for each item, record whether it's covered today (Full coverage / Partial coverage / Gap), what proves
-   it, and any notes. **Start with the items marked "Verify first?" = Yes**, then go through the rest — instead
-   of working through 150–250 rows blindly. As you go, the threat model shows which threats are mitigated and
-   which are still open.
+6. **Assess the checklist.** On "Hardening Baseline" (and "Custom Controls"), filter "Applicable?" to
+   "Applicable" and, for each control, record whether it's covered today (Full coverage / Partial coverage / Gap),
+   what proves it, and any notes. Each control shows, in "ASVS in scope", the ASVS requirements it must meet for
+   this application. **Start with the items marked "Verify first?" = Yes**, then go through the rest — for an L2
+   application, typically 40–50 controls instead of about 200 individual ASVS requirements. As you go, the threat model shows which threats
+   are mitigated and which are still open.
 7. **For every Partial coverage or Gap, fill in "Remediation Owner"** — who can actually fix it: our developers
    (*Internal dev*), a setting (*Configuration*), the *Vendor*, a protection placed around the application
    (*Compensating* — e.g., a web application firewall), or a formal decision not to fix it (*Risk acceptance*).
@@ -98,6 +101,9 @@ result of the whole copy.
 
 - **ASVS** — the security checklist standard this baseline is built on, maintained by OWASP (a nonprofit,
   vendor-neutral security organization). Think of it as a building code, but for applications.
+- **Hardening Baseline** — the checklist you actually fill in: ASVS consolidated into 59 controls (`HB-…` IDs). The
+  "ASVS Checklist" tab keeps the full, unmodified ASVS as the reference and shows, for each ASVS requirement, the
+  control that covers it and its current status — so any item can be traced back to ASVS for an audit.
 - **Level (L1 / L2 / L3)** — how strict the checklist should be for a given application. L1 is the baseline
   every application should meet; L2 is for applications handling sensitive data; L3 is for high-stakes
   applications (e.g., regulated financial or health data).
@@ -132,7 +138,8 @@ there is only one risk rating per application. Details are in
 ## Adding your own controls and threats
 
 - **Your own checklist items** go on the "Custom Controls" tab, never on "ASVS Checklist" (which stays an exact
-  copy of ASVS, so it can be refreshed when a new ASVS version comes out). IDs: `CUSTOM-01`, `CUSTOM-02`, … for
+  copy of ASVS, so it can be refreshed when a new ASVS version comes out) nor on "Hardening Baseline" (where every
+  control must come from ASVS). IDs: `CUSTOM-01`, `CUSTOM-02`, … for
   the organization's own rules, and `TMX-…` (e.g. `TMX-VENDOR-001`) for protections that come from threat
   modeling — typically around vendor products.
 - **Threats, detections and log sources** live in the catalog tabs (purple). They are maintained centrally, in

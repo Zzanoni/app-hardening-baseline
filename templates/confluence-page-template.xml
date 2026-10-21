@@ -42,7 +42,7 @@
         </tr>
         <tr>
           <th>Template Version</th>
-          <td>{{e.g. 3.0.0}}</td>
+          <td>{{e.g. 4.0.0}}</td>
         </tr>
         <tr>
           <th>Overall Status</th>
@@ -401,7 +401,7 @@ master hardening template.</p>
       <th>Value</th>
     </tr>
     <tr>
-      <td>Total applicable requirements</td>
+      <td>Total applicable controls</td>
       <td>{{count}}</td>
     </tr>
     <tr>
@@ -462,18 +462,19 @@ master hardening template.</p>
 </table>
 
 <h2>3. Hardening Checklist</h2>
-<p>One Expand block per ASVS chapter with at least one applicable requirement. Delete unused chapter
-blocks; duplicate this block for each chapter that has applicable rows.</p>
+<p>One Expand block per Hardening Baseline category with at least one applicable control. Delete unused
+category blocks; duplicate this block for each category that has applicable rows. "ASVS in scope" traces each
+control to the OWASP ASVS requirements it was assessed against.</p>
 
 <ac:structured-macro ac:name="expand" ac:schema-version="1" ac:local-id="chapter-block-example">
-  <ac:parameter ac:name="title">{{V# - Chapter Name}} — {{n}} applicable requirements</ac:parameter>
+  <ac:parameter ac:name="title">{{Category}} — {{n}} applicable controls</ac:parameter>
   <ac:rich-text-body>
     <table>
       <tbody>
         <tr>
-          <th>ASVS ID</th>
+          <th>Control ID</th>
           <th>Requirement</th>
-          <th>Level</th>
+          <th>ASVS in scope</th>
           <th>Criticality</th>
           <th>Control Type</th>
           <th>Coverage Status</th>
@@ -481,9 +482,9 @@ blocks; duplicate this block for each chapter that has applicable rows.</p>
           <th>Notes</th>
         </tr>
         <tr>
-          <td>{{e.g. V6.2.1}}</td>
+          <td>{{e.g. HB-AUTH-01}}</td>
           <td>{{requirement text, copied verbatim from the spreadsheet}}</td>
-          <td>{{1 / 2 / 3}}</td>
+          <td>{{e.g. V6.1.2; V6.2.1; V6.2.2; …}}</td>
           <td>
             <ac:structured-macro ac:name="status" ac:schema-version="1" ac:local-id="row-crit-example">
               <ac:parameter ac:name="colour">Grey</ac:parameter>
@@ -507,7 +508,7 @@ blocks; duplicate this block for each chapter that has applicable rows.</p>
 
 <h2>4. Company-Specific Controls</h2>
 <p>Rows copied from the spreadsheet's <em>Custom Controls</em> sheet — requirements this organization
-tracks beyond OWASP ASVS. Kept in its own block, separate from the ASVS chapter blocks above, so a
+tracks beyond OWASP ASVS. Kept in its own block, separate from the baseline category blocks above, so a
 reader can tell which requirements are the industry standard and which are this organization's own
 addition. Delete this whole block if the application's Custom Controls sheet has no applicable rows.</p>
 
@@ -631,7 +632,7 @@ baseline repository (detections/sigma/).</p>
   <ac:task>
     <ac:task-id>1</ac:task-id>
     <ac:task-status>incomplete</ac:task-status>
-    <ac:task-body>{{ASVS ID / Control ID}} — {{short description of the gap}} — coverage: {{Gap / Partial coverage}} — backlog priority: {{Critical / High / Medium / Low}} — remediation owner: {{Internal dev / Configuration / Vendor / Compensating / Risk acceptance}} — linked threats: {{threat IDs, or none}} — owner: {{name}} — due: {{date}}</ac:task-body>
+    <ac:task-body>{{Control ID}} — {{short description of the gap}} — coverage: {{Gap / Partial coverage}} — backlog priority: {{Critical / High / Medium / Low}} — remediation owner: {{Internal dev / Configuration / Vendor / Compensating / Risk acceptance}} — linked threats: {{threat IDs, or none}} — owner: {{name}} — due: {{date}}</ac:task-body>
   </ac:task>
 </ac:task-list>
 <h3>Log sources to enable</h3>

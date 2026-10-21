@@ -37,7 +37,7 @@ space (e.g., a space-wide dashboard of hardening status).
 | Security Review Required | Extended Characterization → `NEEDS_SECURITY_REVIEW` (+ `REVIEW_REASONS` when Yes) |
 | Owner / Team | Filled in manually (or Extended Characterization → `BUSINESS_OWNER` / `TECHNICAL_OWNER`) |
 | Last Reviewed | Filled in manually (date) |
-| Template Version | Instructions sheet / `_meta` → `TEMPLATE_VERSION` (e.g. 3.0.0) |
+| Template Version | Instructions sheet / `_meta` → `TEMPLATE_VERSION` (e.g. 4.0.0) |
 | Overall Status | One of: Not started / In progress / Complete — filled in manually |
 
 ### 2. Table of Contents
@@ -61,7 +61,7 @@ into the full checklist:
 
 | Metric | Value |
 | --- | --- |
-| Total applicable requirements | *(count of `Applicable` rows for this app)* |
+| Total applicable controls | *(count of `Applicable` rows for this app)* |
 | 🟢 Full coverage | *(count)* |
 | 🟡 Partial coverage | *(count)* |
 | 🔴 Gap | *(count)* |
@@ -69,18 +69,22 @@ into the full checklist:
 | 🔴 Critical items | *(count of applicable rows with Criticality = Critical)* |
 | 🟠 High items | *(count of applicable rows with Criticality = High)* |
 
-The Critical/High counts are a read of the `Criticality` column (ASVS Checklist column P), not of
+The Critical/High counts are a read of the `Criticality` column (Hardening Baseline column P), not of
 Coverage Status — a Critical item can still be Full coverage; this row exists so a reviewer can see at
 a glance how many high-priority items this application carries, independent of how well they're
 currently covered.
 
-### 5. Hardening Checklist, grouped by ASVS chapter
+### 5. Hardening Checklist, grouped by baseline category
 
-One **Expand** macro per ASVS chapter that has at least one applicable requirement (collapsed by
-default, to keep the page navigable — an application in scope for most chapters can easily have 150–250
-rows). Inside each Expand, a table with columns:
+One **Expand** macro per category of the `Hardening Baseline` sheet (column B — Authentication, Access control,
+…) that has at least one applicable control, collapsed by default to keep the page navigable. Inside each Expand,
+a table with columns:
 
-`ASVS ID | Requirement | Level | Criticality | Control Type | Coverage Status | Tool / Evidence | Notes`
+`Control ID | Requirement | ASVS in scope | Criticality | Control Type | Coverage Status | Tool / Evidence | Notes`
+
+`ASVS in scope` is column F of the sheet — the ASVS requirements the control was assessed against for this
+application. It is what lets a reader trace each result back to ASVS without opening the workbook (the
+workbook's `ASVS Checklist` sheet gives the reverse view, per ASVS requirement).
 
 `Criticality` uses the Status macro (Red = Critical, Purple = High, Yellow = Medium, Grey = Low) — the
 closest mapping onto Confluence's fixed status-macro palette (Grey/Red/Yellow/Green/Blue/Purple, which
@@ -92,16 +96,16 @@ how Criticality is computed.
 `Coverage Status` uses the Status macro (Green = Full coverage, Yellow = Partial coverage, Red = Gap,
 Grey = Not assessed), matching the spreadsheet's conditional formatting colors.
 
-Only chapters and rows marked `Applicable` in the filtered spreadsheet are copied in — `N/A` rows are
+Only categories and rows marked `Applicable` in the filtered spreadsheet are copied in — `N/A` rows are
 left out of the page entirely (that exclusion is itself recorded in section 3, via the characterization
 answers).
 
 ### 6. Company-Specific Controls
 
-One additional **Expand** macro, kept separate from the ASVS-chapter Expand blocks in section 5, for
+One additional **Expand** macro, kept separate from the baseline Expand blocks in section 5, for
 rows copied from the spreadsheet's `Custom Controls` sheet (organization-specific requirements that
 aren't part of ASVS — see [`hardening-baseline-governance.md`](hardening-baseline-governance.md#extending-the-baseline-beyond-asvs)).
-Same table columns as section 5, with `Control ID` in place of `ASVS ID`. Omit this block entirely if
+Same table columns as section 5, with `Level` in place of `ASVS in scope`. Omit this block entirely if
 the application's `Custom Controls` sheet has no applicable rows.
 
 ### 7. Threat Model
@@ -137,7 +141,7 @@ Red = Rejected. It is recorded per application in the `Deployment status` column
 *Copied from the workbook's `Backlog` sheet*, in the order it shows. Two **Task List** macros:
 
 1. **Controls to fix** — one task per row of the backlog's left block (Coverage Status Gap or Partial coverage,
-   from both `ASVS Checklist` and `Custom Controls`), stating its coverage, **Backlog priority** (the higher of
+   from both `Hardening Baseline` and `Custom Controls`), stating its coverage, **Backlog priority** (the higher of
    Criticality and Threat priority), **Remediation Owner** (Internal dev / Configuration / Vendor / Compensating /
    Risk acceptance — see
    [`hardening-baseline-governance.md`](hardening-baseline-governance.md#remediation-owner)) and **linked
@@ -161,9 +165,9 @@ is revisited, rather than editing history away.
 3. Copy the workbook's `Threat Model` sheet into section 7 and its `Detection Plan` sheet into section 8. Right
    after the characterization they are already filled in (mode *Characterization-only*); the workbook's
    `Controls to Verify` sheet tells you which checklist rows to assess first.
-4. Filter the workbook's `ASVS Checklist` sheet to `Applicable`, and for each ASVS chapter present, copy its
-   rows into the matching Expand block in section 5 (create one Expand block per chapter that has applicable
-   rows; delete unused chapter blocks from the template).
+4. Filter the workbook's `Hardening Baseline` sheet to `Applicable`, and for each category present, copy its
+   rows into the matching Expand block in section 5 (create one Expand block per category that has applicable
+   rows; delete unused category blocks from the template).
 5. If the `Custom Controls` sheet has any applicable rows, copy them into section 6; otherwise delete
    that block.
 6. Fill in section 4 (Coverage Summary) counts once sections 5 and 6 are complete.

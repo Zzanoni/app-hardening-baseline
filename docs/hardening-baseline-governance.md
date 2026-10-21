@@ -79,6 +79,45 @@ their role is to validate what automation cannot reach (business logic, chained 
 only considered "hardened" once every row has a mapped, running control — a row with no corresponding control is
 a **coverage gap**, not an item resolved by documentation alone.
 
+## Consolidated baseline and ASVS traceability
+
+Assessing ASVS one requirement at a time is precise but heavy: a typical L2 application has about 200 applicable
+requirements, many of them small facets of the same control (a dozen separate cookie and header items, thirteen
+password-policy items, a documentation requirement next to each implementation requirement). A checklist that long
+is hard to sustain across many applications — and a checklist that isn't kept up to date stops being evidence.
+
+The baseline is therefore **ASVS consolidated into a shorter list of controls** (`Hardening Baseline` sheet,
+IDs `HB-<AREA>-NN`), without giving up ASVS as the reference:
+
+- **Unification** — requirements that are verified together and fixed by the same team become one control
+  (e.g. `HB-AUTH-01` *Password policy* covers V6.1.2 and V6.2.1–V6.2.12). A documentation requirement joins the
+  control it documents ("documented **and** enforced").
+- **Simplification** — the control states the bar in plain words, and keeps level-specific details inline
+  ("L3: …"). The precise wording stays in ASVS.
+- **Removal** — a few requirements are left out on purpose (e.g. a functional cookie-size limit, a platform
+  capability, a protocol feature without broad support). They are not deleted: they stay in `ASVS Checklist`
+  marked `Excluded`, each with its rationale.
+
+**Traceability, both ways.** The mapping is one column — `ASVS Checklist` column I — where every ASVS requirement
+points to exactly one baseline control, or says `Excluded` (rationale in column J):
+
+- From a control to ASVS: `Hardening Baseline` column C lists **all** the ASVS requirements it covers, and column F
+  the ones **in scope for this application** (ASVS chapter applicable and level at or below the target level). The
+  control is Applicable when at least one of them is, and it is assessed against that list: *Full coverage* only
+  when all of them are met. Its Level (column D) is the lowest level among them.
+- From ASVS to a result: `ASVS Checklist` column K shows, for every in-scope requirement, the Coverage Status of the
+  control that covers it. An auditor asking "how is V8.2.2 covered here?" gets the control, its status and its
+  evidence without a second assessment.
+
+The mapping is checked by `Catalog Health` (11a–11d): no requirement without a control (or an `Excluded` with a
+rationale), no control without a requirement, no duplicate IDs.
+
+**Changing the baseline** (master template only) is a change to columns I/J of `ASVS Checklist` and/or rows of
+`Hardening Baseline`: re-point requirements, split or merge controls, exclude or re-include a requirement with its
+rationale. Columns C, D, F, G and H of the baseline recalculate by themselves. After an ASVS upgrade, every new
+requirement starts unmapped and `Catalog Health` lists it until it is assigned. Update `Threat-Control Map` when a
+control linked to a threat is split or renamed.
+
 ## Risk tiering / Criticality
 
 Coverage status alone ("Full / Partial / Gap") does not tell a team which gaps to fix first. Every
@@ -91,16 +130,18 @@ risk depending on the application it applies to (a broken-access-control gap is 
 regulated-data application than on an internal tool). It is computed per application, per applicable
 item, from two independent factors:
 
-1. **Requirement Impact** — fixed per ASVS chapter, reflecting how severe it is when that *type* of
+1. **Requirement Impact** — fixed per control, reflecting how severe it is when that *type* of
    control fails (e.g., Authentication, Authorization, Cryptography, Session Management = High;
-   Configuration = Low). Implemented in the ASVS Checklist sheet as column **O**.
+   Configuration = Low). It starts from a fixed value per ASVS chapter, and each consolidated control
+   takes the highest value among the ASVS requirements it covers. Implemented in the Hardening Baseline
+   sheet as column **O**.
 2. **Application Risk Tier** — derived per application from three Characterization Form answers: Data
    Sensitivity, network Exposure, and Business Impact. The application's tier is the *worst* of the
    three (the single highest-risk factor drives the tier, rather than being diluted by an average).
    Implemented as the computed `APP_RISK_TIER` field on the Characterization Form sheet.
 
 The two factors cross in a risk matrix (also on the Characterization Form sheet, named range
-`CRIT_MATRIX`) to produce the final Criticality value, in ASVS Checklist column **P**:
+`CRIT_MATRIX`) to produce the final Criticality value, in Hardening Baseline column **P**:
 
 | Requirement Impact \ App Risk Tier | Low | Medium | High | Critical |
 | --- | --- | --- | --- | --- |
@@ -108,7 +149,7 @@ The two factors cross in a risk matrix (also on the Characterization Form sheet,
 | Medium | Low | Medium | Medium | High |
 | Low | Low | Low | Low | Medium |
 
-Only requirements already marked `Applicable` receive a Criticality value; `N/A` rows are unaffected.
+Only controls already marked `Applicable` receive a Criticality value; `N/A` rows are unaffected.
 
 ### Governance rules by criticality
 
@@ -125,14 +166,16 @@ an organization may need to track — an internal policy, a contractual or regul
 to the organization, or a control for a technology ASVS doesn't address (e.g., a specific internal
 platform) may all need to be part of the same hardening record.
 
-These go on the **`Custom Controls`** sheet of the master workbook, never appended to `ASVS Checklist`.
-The separation is deliberate:
+These go on the **`Custom Controls`** sheet of the master workbook, never appended to `ASVS Checklist`
+or `Hardening Baseline`. The separation is deliberate:
 
-- `ASVS Checklist` must stay a byte-for-byte match of the upstream ASVS content, so a future ASVS
-  release can always be diffed and merged in cleanly, and the "we don't modify the underlying ASVS
+- `ASVS Checklist` columns A–G must stay a byte-for-byte match of the upstream ASVS content, so a future
+  ASVS release can always be diffed and merged in cleanly, and the "we don't modify the underlying ASVS
   requirement text" claim in this repo stays true without caveats.
-- Custom control IDs are then guaranteed never to collide with a real or future ASVS ID, even across
-  ASVS version upgrades.
+- `Hardening Baseline` only holds controls that consolidate ASVS requirements — every one of its rows must
+  trace back to ASVS. A control with no ASVS basis belongs in `Custom Controls`.
+- Custom control IDs are then guaranteed never to collide with a real or future ASVS ID or `HB-*` ID, even
+  across ASVS version upgrades.
 
 **Custom control ID convention:**
 
@@ -147,16 +190,16 @@ catalog, and they are maintained centrally together with the threat catalog. The
 (`TMX-VENDOR-001`, `TMX-VENDOR-002`, `TMX-WAF-001`, `TMX-EGRESS-001`, all Draft); `EXAMPLE-01` is a worked
 example. ID conventions are listed in [`workbook-structure.md`](workbook-structure.md#id-conventions).
 
-`Custom Controls` mirrors `ASVS Checklist`'s columns and reuses the same underlying mechanics
+`Custom Controls` mirrors `Hardening Baseline`'s columns and reuses the same underlying mechanics
 (`TARGET_LEVEL_NUM` for level gating, `CRIT_MATRIX`/`APP_RISK_TIER` for Criticality) — a custom control
 gets filtered and prioritized exactly like an ASVS one. The one deliberate difference: its Applicability
-Formula column is a live, directly-editable formula (default `=TRUE()`, i.e. always applicable) rather
-than `ASVS Checklist`'s hidden helper column, since a custom control's applicability condition is
-organization-defined and can't be pre-written into the template the way ASVS chapter gating can.
+Formula column is a live, directly-editable formula (default `=TRUE()`, i.e. always applicable), whereas a
+baseline control's applicability is inherited from its ASVS requirements, since a custom control's
+applicability condition is organization-defined and can't be derived from ASVS chapter gating.
 
 When publishing to Confluence (see [`confluence-page-template.md`](confluence-page-template.md)), custom
 controls get their own Expand block ("Company-Specific Controls"), kept visually separate from the
-ASVS-chapter blocks so a reader can tell at a glance which requirements are the industry standard and
+baseline blocks so a reader can tell at a glance which requirements are the industry standard and
 which are this organization's own addition.
 
 A custom control's Applicability Formula may reference any characterization key, including the ones on
@@ -170,7 +213,7 @@ Coverage Status says *whether* a requirement is met; it doesn't say *who can clo
 applications built in-house that is almost always the development team, but for vendor products (COTS,
 appliances) most application-level gaps can't be fixed by the organization at all. Every row with
 Coverage Status `Partial coverage` or `Gap` therefore also records a **Remediation Owner** (column Q of
-`ASVS Checklist` and `Custom Controls`; blank for other rows):
+`Hardening Baseline` and `Custom Controls`; blank for other rows):
 
 | Value | Use when | Typical for |
 | --- | --- | --- |
@@ -196,7 +239,7 @@ the same threats — and STRIDE-based, and it shares everything it can with the 
   `Extended Characterization`); there is no second questionnaire.
 - **Shared risk tier.** Threat risk is the threat's own likelihood × impact crossed with the same
   `APP_RISK_TIER`; there is no second risk rating.
-- **Shared control catalog.** `Threat-Control Map` links each threat to rows of `ASVS Checklist` (ASVS) and
+- **Shared control catalog.** `Threat-Control Map` links each threat to rows of `Hardening Baseline` and
   `Custom Controls` (including `TMX-*`); a threat's mitigation status comes from their Coverage Status. There is
   no second control list.
 - **Prioritization.** Each control gets a *Threat priority* (the highest risk among the applicable threats it
@@ -248,8 +291,9 @@ those rows.
 
 ## Gaps and the governance role of this document
 
-The baseline document (the company's "reduced ASVS") is not the verification mechanism itself — it is the
-**inventory of requirements against which the coverage matrix is filled in**. It serves three purposes, none of
+The baseline (the company's "reduced ASVS" — the consolidated `Hardening Baseline` described above) is not the
+verification mechanism itself — it is the **inventory of requirements against which the coverage matrix is filled
+in**. It serves three purposes, none of
 them redundant with the technical control:
 
 1. **Define the bar** — what "hardened" means at this company, at a level of detail generic ASVS does not
