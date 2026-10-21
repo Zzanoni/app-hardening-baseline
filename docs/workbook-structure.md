@@ -1,4 +1,4 @@
-# Workbook Structure — reference (template v3.0.0)
+# Workbook Structure — reference (template v4.0.0)
 
 Human-readable map of [`templates/ASVS_Master_Hardening_Template.xlsx`](../templates/ASVS_Master_Hardening_Template.xlsx):
 every sheet, who edits it, its columns, every named range, the closed vocabularies and the ID conventions. Use it
@@ -19,20 +19,21 @@ Requires Excel for Microsoft 365. No macros.
 | 3 | `Extended Characterization` | — | App team | 53 more questions, Applicable/Status per row, result block, review triggers. |
 | 4 | `Threat Model` | blue | — (view) | Applicable threats with risk and mitigation status; summary block. |
 | 5 | `Controls to Verify` | blue | — (view) | Checklist rows to assess first; `TM_MODE`. |
-| 6 | `ASVS Checklist` | — | App team (columns L, M, N, Q) | OWASP ASVS 5.0.0 checklist (345 rows). |
-| 7 | `Custom Controls` | — | App team (status) / Security (rows) | Organization and threat-modeling controls (200 rows). |
-| 8 | `Backlog` | blue | — (view) | Controls to fix, log sources to enable. |
-| 9 | `Detection Plan` | blue | — (view) | Detections relevant to the application. |
-| 10 | `Threat Library` | purple | Security (master only) | Threat catalog (table `tblThreats`). |
-| 11 | `Threat-Control Map` | purple | Security (master only) | Threat ↔ control links (table `tblThreatControls`). |
-| 12 | `Detections` | purple | Security (master only); **Deployment status** per application | Detection catalog (table `tblDetections`). |
-| 13 | `Threat-Detection Map` | purple | Security (master only) | Threat ↔ detection links (table `tblThreatDetections`). |
-| 14 | `Log Sources` | purple | Security (master only) | Log source catalog (table `tblLogSources`). |
-| 15 | `TM Config` | purple | Security (master only) | Risk scale, risk matrices, Sigma base URL. |
-| 16 | `Catalog Health` | blue | — (view) | Consistency checks; `CATALOG_HEALTH`. |
-| 17 | `Archetypes` | — | Security | Architecture archetypes (ID, name, description). |
-| 18 | `_lists` | hidden | Security | Dropdown option lists (`LIST_*`). |
-| 19 | `_meta` | hidden | Security | `TEMPLATE_VERSION`, `ASVS_VERSION`. |
+| 6 | `Hardening Baseline` | — | App team (columns L, M, N, Q) / Security (rows) | The checklist: 59 consolidated controls traced to OWASP ASVS 5.0.0 (room for 120). |
+| 7 | `ASVS Checklist` | — | Security (columns I, J; master only) | OWASP ASVS 5.0.0 reference (345 rows) and ASVS ↔ baseline traceability. Not assessed directly. |
+| 8 | `Custom Controls` | — | App team (status) / Security (rows) | Organization and threat-modeling controls (200 rows). |
+| 9 | `Backlog` | blue | — (view) | Controls to fix, log sources to enable. |
+| 10 | `Detection Plan` | blue | — (view) | Detections relevant to the application. |
+| 11 | `Threat Library` | purple | Security (master only) | Threat catalog (table `tblThreats`). |
+| 12 | `Threat-Control Map` | purple | Security (master only) | Threat ↔ control links (table `tblThreatControls`). |
+| 13 | `Detections` | purple | Security (master only); **Deployment status** per application | Detection catalog (table `tblDetections`). |
+| 14 | `Threat-Detection Map` | purple | Security (master only) | Threat ↔ detection links (table `tblThreatDetections`). |
+| 15 | `Log Sources` | purple | Security (master only) | Log source catalog (table `tblLogSources`). |
+| 16 | `TM Config` | purple | Security (master only) | Risk scale, risk matrices, Sigma base URL. |
+| 17 | `Catalog Health` | blue | — (view) | Consistency checks; `CATALOG_HEALTH`. |
+| 18 | `Archetypes` | — | Security | Architecture archetypes (ID, name, description). |
+| 19 | `_lists` | hidden | Security | Dropdown option lists (`LIST_*`). |
+| 20 | `_meta` | hidden | Security | `TEMPLATE_VERSION`, `ASVS_VERSION`. |
 
 Purple (catalog) sheets are protected **without password** — only to prevent accidental edits. To maintain them:
 *Review → Unprotect Sheet*, edit, then protect again. In the catalog tables, yellow columns are inputs, grey
@@ -58,25 +59,26 @@ Section header rows (A–M) separate the questions; each answer in column D is a
 - **Security review triggers** (rows 79–86): one row per trigger — ID (A), reason (B), Yes/No formula (D),
   cumulative reasons helper (E). `NEEDS_SECURITY_REVIEW` = Yes when any trigger row says Yes.
 
-## Control sheets (`ASVS Checklist`, `Custom Controls`)
+## Control sheets (`Hardening Baseline`, `Custom Controls`)
 
-Header row 4. `ASVS Checklist` rows 5–349; `Custom Controls` rows 5–204 (pre-filled formulas; a row is ignored
-while its Control ID is blank).
+Header row 4. `Hardening Baseline` rows 5–124 (59 controls; the remaining rows are pre-filled and ignored while
+their Control ID is blank); `Custom Controls` rows 5–204 (same rule).
 
 | Col | Header | Input? | Content |
 | --- | --- | --- | --- |
-| A | ASVS ID / Control ID | ASVS: no — Custom: yes | Requirement ID |
-| B–C | Chapter, Section / Category, Sub-category | ASVS: no — Custom: yes | |
-| D | Level | ASVS: no — Custom: yes | 1–3 |
-| E | Requirement | ASVS: no — Custom: yes | Requirement text |
-| F | Applicability Condition | ASVS: no — Custom: yes | Human-readable condition |
-| G | Applicability Formula | ASVS: hidden helper — Custom: live formula | `=TRUE()` = always |
-| H | Applicable? | — | `Applicable` / `N/A` |
-| I–K | Control Type, Nature, Verification Stage | ASVS: no — Custom: yes | |
+| A | Control ID | Security (master) | `HB-<AREA>-NN` / `CUSTOM-NN` / `TMX-<AREA>-NNN` |
+| B | Category | Security (master) | |
+| C | ASVS references / Sub-category | Baseline: — (calculated) · Custom: yes | Baseline: every ASVS ID mapped to the control |
+| D | Level | Baseline: — (lowest level of its ASVS IDs) · Custom: yes | 1–3 |
+| E | Requirement | Security (master) | Control text |
+| F | ASVS in scope / Applicability Condition | Baseline: — · Custom: yes | Baseline: ASVS IDs of the control that apply to this application |
+| G | ASVS in scope (count) / Applicability Formula | Baseline: — · Custom: live formula | Custom: `=TRUE()` = always |
+| H | Applicable? | — | `Applicable` / `N/A`. Baseline: Applicable when G ≥ 1 |
+| I–K | Control Type, Nature, Verification Stage | Security (master) | |
 | L | Coverage Status | **yes** | Coverage Status vocabulary |
 | M | Tool / Evidence | **yes** | |
 | N | Notes | **yes** | |
-| O | Requirement Impact | ASVS: no — Custom: yes | Low / Medium / High |
+| O | Requirement Impact | Security (master) | Low / Medium / High. Baseline: highest impact among its ASVS IDs |
 | P | Criticality | — | Requirement Impact × `APP_RISK_TIER` |
 | Q | Remediation Owner | **yes** (Gap / Partial rows) | Remediation Owner vocabulary |
 | R | Linked threats | — | Number of applicable threats linked to the control |
@@ -85,7 +87,19 @@ while its Control ID is blank).
 | U | Backlog priority | — | Gap / Partial only: higher of P and S |
 | V | Linked threat IDs | — | IDs of those threats |
 
-`ASVS Checklist` columns A–G are a verbatim copy of OWASP ASVS 5.0.0 — never edit them, never add rows.
+## `ASVS Checklist` (reference and traceability)
+
+Header row 4, rows 5–349, one row per OWASP ASVS 5.0.0 requirement. Not assessed directly.
+
+| Col | Header | Input? | Content |
+| --- | --- | --- | --- |
+| A–E | ASVS ID, Chapter, Section, Level, Requirement | no | Verbatim copy of OWASP ASVS 5.0.0 — never edit, never add rows |
+| F | Applicability Condition | no | Human-readable chapter condition |
+| G | Applicability Formula | no (hidden helper) | `TRUE` = always |
+| H | Applicable? | — | `Applicable` / `N/A`: chapter applies and Level ≤ `TARGET_LEVEL_NUM` |
+| I | Baseline control | Security (master) | The `HB-*` control that covers the requirement, or `Excluded` |
+| J | Exclusion rationale | Security (master) | Required when I = `Excluded` |
+| K | Baseline coverage | — | Coverage Status of the control in I; `N/A` when H is N/A; `Excluded` |
 
 ## Catalog tables
 
@@ -98,8 +112,8 @@ TRUE/FALSE), `References`, `Likelihood`, `Impact`, `Review status`, `Notes`. Cal
 `Controls linked`, `Full`, `Partial`, `Gap`, `Not assessed`, `NA controls`, `Mitigation status`,
 `Detections linked`, `Archetypes valid`.
 
-**`tblThreatControls`** (`Threat-Control Map`) — inputs: `Threat ID`, `Control ID`, `Default owner`,
-`How it mitigates`. Calculated: `Control source` (`ASVS` / `Custom` / `NOT FOUND`), `Control applicable`,
+**`tblThreatControls`** (`Threat-Control Map`) — inputs: `Threat ID`, `Control ID` (`HB-*` or a `Custom Controls`
+ID), `Default owner`, `How it mitigates`. Calculated: `Control source` (`Baseline` / `Custom` / `NOT FOUND`), `Control applicable`,
 `Coverage status` (`N/A` when the control doesn't apply; blank counts as `Not assessed`), `Effective owner`
 (column Q of the control, else Default owner), `Threat applies`, `Threat risk`, `Threat risk score`, `Warning`
 (`Control N/A for applicable threat` when a threat applies but a control within the target level doesn't — the
@@ -166,9 +180,14 @@ Each view is one dynamic-array formula that spills below its header; never type 
 (+ `BASE_RISK_ROWS` = Impact, `BASE_RISK_COLS` = Likelihood), `FINAL_RISK_MATRIX` (+ `FINAL_RISK_ROWS` = Base risk,
 `FINAL_RISK_COLS` = Risk Tier), `SIGMA_BASE_URL`.
 
-**Column ranges of the control sheets** — `MT_*` (`ASVS Checklist`, rows 5–349; the prefix comes from the sheet's former name, *Master Template*) and `CC_*` (`Custom Controls`, rows 5–204): `IDS` (A), `LEVEL` (D),
-`REQ` (E), `FORMULA` (G), `APPLICABLE` (H), `TYPE` (I), `STAGE` (K), `COVERAGE` (L), `CRIT` (P), `OWNER` (Q),
-`LINKED` (R), `TPRIO` (S), `VERIFY` (T), `BACKLOG` (U), `TIDS` (V).
+**Column ranges of the control sheets** — `BL_*` (`Hardening Baseline`, rows 5–124) and `CC_*` (`Custom Controls`,
+rows 5–204): `IDS` (A), `LEVEL` (D), `REQ` (E), `APPLICABLE` (H), `TYPE` (I), `STAGE` (K), `COVERAGE` (L), `CRIT` (P),
+`OWNER` (Q), `LINKED` (R), `TPRIO` (S), `VERIFY` (T), `BACKLOG` (U), `TIDS` (V); plus `BL_ASVS` (C), `BL_INSCOPE` (F)
+and `CC_FORMULA` (G).
+
+**`ASVS Checklist` ranges** — `MT_*`, rows 5–349 (the prefix comes from the sheet's former name, *Master Template*):
+`MT_IDS` (A), `MT_LEVEL` (D), `MT_REQ` (E), `MT_FORMULA` (G), `MT_APPLICABLE` (H), `MT_BASELINE` (I),
+`MT_EXCLUSION` (J), `MT_BASELINE_COVERAGE` (K).
 
 **Other**: `ARCHETYPE_IDS`, `ARCHETYPE_NAMES` (`Archetypes` A/B, rows 5–30), `LIST_*` dropdown lists on `_lists`,
 `TEMPLATE_VERSION`, `ASVS_VERSION` on `_meta`.
@@ -193,6 +212,7 @@ Each view is one dynamic-array formula that spills below its header; never type 
 | Pattern | Where | Example |
 | --- | --- | --- |
 | `V<chapter>.<section>.<n>` | ASVS requirement (`ASVS Checklist`) | `V6.3.1` |
+| `HB-<AREA>-NN` | Consolidated baseline control (`Hardening Baseline`) | `HB-AUTH-02` |
 | `CUSTOM-NN` | Organization policy / contractual / platform-specific control (`Custom Controls`) | `CUSTOM-01` |
 | `TMX-<AREA>-NNN` | Control originated by threat modeling (`Custom Controls`) | `TMX-VENDOR-001` |
 | `TM-<S/T/R/I/D/E>-NNN` | Threat (`Threat Library`) | `TM-S-001` |

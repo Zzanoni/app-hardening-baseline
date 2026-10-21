@@ -65,7 +65,7 @@ Initial matrices (a proposal — calibrate them during the pilot):
 
 ## Is it mitigated?
 
-`Threat-Control Map` links each threat to the checklist rows (`ASVS Checklist` ASVS IDs or `Custom Controls` IDs)
+`Threat-Control Map` links each threat to the checklist rows (`Hardening Baseline` IDs or `Custom Controls` IDs)
 that protect against it. The threat's **mitigation status** comes from their Coverage Status, counting only the
 controls that apply to this application:
 
@@ -135,11 +135,11 @@ title and description, `All` or the relevant `ARCH-*` IDs, the condition in word
 to controls and detections (below). `Catalog Health` flags it until it has at least one control and one detection
 — or, if no sensible detection exists, write `No detection: <reason>` in Notes.
 
-**Link controls** — on `Threat-Control Map`, one row per control: Threat ID, Control ID (an ASVS ID from
-`ASVS Checklist` — read the requirement text, never guess — or a `Custom Controls` ID), the default Remediation
-Owner, and one line on how it mitigates. `Control source` must not say `NOT FOUND`.
+**Link controls** — on `Threat-Control Map`, one row per control: Threat ID, Control ID (an `HB-*` ID from
+`Hardening Baseline` — read the control and its ASVS references, never guess — or a `Custom Controls` ID), the
+default Remediation Owner, and one line on how it mitigates. `Control source` must not say `NOT FOUND`.
 
-**Add a `TMX-*` control** — when no ASVS requirement expresses the protection (typically vendor, compensating or
+**Add a `TMX-*` control** — when no baseline control (and no ASVS requirement) expresses the protection (typically vendor, compensating or
 infrastructure controls): on `Custom Controls`, fill the next empty row with a `TMX-<AREA>-NNN` ID, category,
 level, requirement text, condition in words and in column G (e.g. `=IS_COTS`), control type, nature,
 verification stage and Requirement Impact. Then link it on `Threat-Control Map`.
@@ -160,6 +160,10 @@ Critical) unchanged.
 **Approve content** — once a threat, its links and its detection have been reviewed, set `Review status` to
 `Approved` on `Threat Library` / `Detections`. The starter catalog ships as `Draft`.
 
+**Change the consolidated baseline** — see
+[`hardening-baseline-governance.md`](hardening-baseline-governance.md#consolidated-baseline-and-asvs-traceability):
+the ASVS ↔ control mapping is column I of `ASVS Checklist`; `Catalog Health` checks 11a–11d keep it complete.
+
 **Never** rename sheets, table names, column headers, keys or named ranges; never add rows to `ASVS Checklist`.
 
 ## Upgrading an application copy
@@ -170,11 +174,18 @@ files and copy **values** (*Paste Special → Values*), matching by key or ID, n
 1. **Characterization answers** — column D of `Characterization Form` and `Extended Characterization`, matched by
    the key in column A.
 2. **Control assessments** — columns L (Coverage Status), M (Tool / Evidence), N (Notes) and Q (Remediation
-   Owner) of `ASVS Checklist` and `Custom Controls`, matched by the ID in column A. For `Custom Controls` rows the
+   Owner) of `Hardening Baseline` and `Custom Controls`, matched by the ID in column A. For `Custom Controls` rows the
    application added itself, copy the whole row (A–G, I–O, Q) into an empty row.
 3. **Detection deployment status** — column `Deployment status` of `Detections`, matched by Detection ID.
 
 Then check `Extended Characterization` for new questions (Status `Missing`) and `Catalog Health`.
+
+**From v3 (per-ASVS checklist) to v4 (consolidated baseline).** v3 copies were assessed per ASVS requirement; v4
+assesses the `Hardening Baseline` controls. For each assessed row of the old `ASVS Checklist`, find its control in
+column I of the new `ASVS Checklist`, then set that control's status from all of its assessed requirements: all Full
+coverage → Full coverage; all Gap → Gap; any mix → Partial coverage. Bring the evidence and notes along, prefixed with
+the ASVS ID (e.g. `V6.3.1: WAF rate limit only`), and re-check the control against its *ASVS in scope* list
+(column F) — requirements that were never assessed in v3 are now part of the control.
 
 ## Excel 365 acceptance checklist
 
@@ -184,8 +195,10 @@ Run once on the master template after any structural change (and on first adopti
       `Controls to Verify`, `Backlog`, `Detection Plan`) spill correctly. `Catalog Health` shows OK.
 - [ ] Set `EXPOSURE` to `Public internet` and `AUTH_LOCAL_CREDENTIALS` to `Yes` → `TM-S-001` (credential stuffing)
       appears in `Threat Model`.
-- [ ] Set one of its linked controls (e.g. `V6.3.1`) to `Gap` → the threat becomes Unmitigated / Partially
+- [ ] Set one of its linked controls (e.g. `HB-AUTH-02`) to `Gap` → the threat becomes Unmitigated / Partially
       mitigated, and the row appears in `Backlog` with a Backlog priority.
+- [ ] On `Hardening Baseline`, columns C and F list ASVS IDs (no `#NAME?`), and `ASVS Checklist` column K shows the
+      Gap of `HB-AUTH-02` on V6.1.1, V6.3.1 and V6.3.8.
 - [ ] Set `LOG_AUTH_EVENTS` to `No` → `LOG-APP-AUTH` appears under "Log sources to enable".
 - [ ] Add a new row to `Threat Library` → the calculated columns fill in; `Catalog Health` flags it until it has
       controls and detections.
