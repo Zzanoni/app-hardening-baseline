@@ -139,10 +139,10 @@ to controls and detections (below). `Catalog Health` flags it until it has at le
 `Hardening Baseline` — read the control and its ASVS references, never guess — or a `Custom Controls` ID), the
 default Remediation Owner, and one line on how it mitigates. `Control source` must not say `NOT FOUND`.
 
-**Add a `TMX-*` control** — when no baseline control (and no ASVS requirement) expresses the protection (typically vendor, compensating or
-infrastructure controls): on `Custom Controls`, fill the next empty row with a `TMX-<AREA>-NNN` ID, category,
-level, requirement text, condition in words and in column G (e.g. `=IS_COTS`), control type, nature,
-verification stage and Requirement Impact. Then link it on `Threat-Control Map`.
+**Add a `TMX-*` control** — when no baseline control (and no ASVS requirement) expresses the protection
+(typically vendor, compensating or infrastructure controls): on `Custom Controls`, fill the next empty row with
+a `TMX-<AREA>-NNN` ID, category, level, requirement text, condition in words and in column G (e.g. `=IS_COTS`),
+control type, nature, verification stage and Requirement Impact. Then link it on `Threat-Control Map`.
 
 **Add a detection** — write the Sigma rule in `detections/sigma/det-<area>-<nnn>-<short-name>.yml` (header comment
 with the Detection ID, `status: experimental`), then on `Detections` add a row: `DET-<AREA>-NNN`, title, what it

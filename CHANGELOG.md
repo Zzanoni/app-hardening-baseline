@@ -31,6 +31,8 @@ a control or to a documented exclusion.
 - **Docs**: section *Consolidated baseline and ASVS traceability* in
   [`docs/hardening-baseline-governance.md`](docs/hardening-baseline-governance.md#consolidated-baseline-and-asvs-traceability);
   Confluence checklist grouped by baseline category with an `ASVS in scope` column.
+- **LICENSE**: attribution notice states that the `Hardening Baseline` controls adapt ASVS text (CC BY-SA 4.0
+  "indicate if changes were made"); `ASVS Checklist` keeps it verbatim.
 
 ### Upgrading a v3 application copy
 By hand, in Excel — v3 assessments were per ASVS requirement; see

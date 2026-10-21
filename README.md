@@ -86,8 +86,8 @@ result of the whole copy.
    "Applicable" and, for each control, record whether it's covered today (Full coverage / Partial coverage / Gap),
    what proves it, and any notes. Each control shows, in "ASVS in scope", the ASVS requirements it must meet for
    this application. **Start with the items marked "Verify first?" = Yes**, then go through the rest — for an L2
-   application, typically 40–50 controls instead of about 200 individual ASVS requirements. As you go, the threat model shows which threats
-   are mitigated and which are still open.
+   application, typically 40–50 controls instead of about 200 individual ASVS requirements. As you go, the threat
+   model shows which threats are mitigated and which are still open.
 7. **For every Partial coverage or Gap, fill in "Remediation Owner"** — who can actually fix it: our developers
    (*Internal dev*), a setting (*Configuration*), the *Vendor*, a protection placed around the application
    (*Compensating* — e.g., a web application firewall), or a formal decision not to fix it (*Risk acceptance*).

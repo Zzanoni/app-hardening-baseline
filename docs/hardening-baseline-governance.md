@@ -52,6 +52,25 @@ any specific technology:
 These categories are the "what"; each company applies its own stack to decide the "how" — which is what keeps
 the baseline agnostic even while covering applications written in different languages and frameworks.
 
+In the workbook, the `Hardening Baseline` controls are grouped (column B) at a finer grain, closer to the ASVS
+chapters, so each group can be assessed by the team that owns it:
+
+| Baseline category | `Hardening Baseline` categories |
+| --- | --- |
+| Architecture and design | — (covered by the threat model and the Security review) |
+| Authentication | Authentication; OAuth and OIDC |
+| Session management | Session management |
+| Access control | Access control |
+| Validation, sanitization, and encoding | Encoding and injection; Validation and business logic (`HB-VAL-*`); HTTP and API; File handling |
+| Cryptography at rest | Cryptography |
+| Error handling and logging | Logging and error handling |
+| Data protection | Data protection |
+| Communication | Communication (TLS); Web frontend (HSTS) |
+| Configuration | Configuration; Web frontend (security headers, cookies) |
+| Business logic / anti-abuse | Validation and business logic (`HB-BIZ-*`, `HB-ABUSE-*`, `HB-AVAIL-*`) |
+| Dependencies and supply chain | Dependencies and secure coding |
+| *(technology-specific)* | WebRTC |
+
 ## Coverage matrix
 
 For each baseline category: what type of technical control should verify it, at what stage it runs, and the
