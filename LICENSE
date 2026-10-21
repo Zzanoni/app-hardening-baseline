@@ -25,7 +25,9 @@ This repository ("Application Hardening Baseline") is licensed under
 the Creative Commons Attribution-ShareAlike 4.0 International License
 (CC BY-SA 4.0), the same license used by the OWASP Application Security
 Verification Standard (ASVS), from which the requirement text, chapter
-structure, and levels referenced in this repository are taken verbatim.
+structure, and levels referenced in this repository are taken (verbatim
+in the workbook's 'ASVS Checklist' sheet; adapted in its 'Hardening
+Baseline' sheet, see the attribution notice below).
 
 To view a copy of this license, visit:
 
@@ -66,4 +68,10 @@ This repository's governance model, applicability formulas, and
 control-type mapping are original work by the repository's author.
 The underlying ASVS requirement text, chapter/section structure, and
 levels are copyright OWASP and used under the terms of CC BY-SA 4.0.
+
+Changes made: the 'Hardening Baseline' controls consolidate, summarize
+and reword ASVS requirements (several requirements per control, with a
+few requirements excluded); each control lists the ASVS requirement IDs
+it is derived from. The 'ASVS Checklist' sheet keeps the original ASVS
+requirement text unmodified.
 See: https://github.com/OWASP/ASVS
